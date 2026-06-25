@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 72b0562f148e6ec46bcdc04fbcfb0f37
+guid: 46fb330969d89b74795458ac5ce41192
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7388011533194795780
-    second: DSystem_NameBox_0
+      213: -3324839415420943986
+    second: miemangkok_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -97,19 +97,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -139,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: DSystem_NameBox_0
+      name: miemangkok_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 423
-        height: 100
+        x: 793
+        y: 904
+        width: 3383
+        height: 2603
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cf46f6767a2887990800000000000000
-      internalID: -7388011533194795780
+      spriteID: e810e9cda2ccbd1d0800000000000000
+      internalID: -3324839415420943986
       vertices: []
       indices: 
       edges: []
@@ -174,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      DSystem_NameBox_0: -7388011533194795780
+      miemangkok_0: -3324839415420943986
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
