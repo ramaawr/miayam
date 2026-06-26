@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,8 @@ using UnityEngine;
 public class bidcontrol : MonoBehaviour
 {
     public GameObject HoldItemOBJ;
-
-
     public GameObject dipegang;
-    private bool udahdipegang = false;
+
 
     void Start()
     {
@@ -18,24 +17,41 @@ public class bidcontrol : MonoBehaviour
     void Update()
     {
         // buat obejknya nempel di kursor
-        if (dipegang != null)
+        if (dipegang != null )
         {
             Vector3 posisiLayar = Input.mousePosition;
             posisiLayar.z = 10f;
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(posisiLayar);
             mousePos.z = 0f;
             dipegang.transform.position = mousePos;
+
+            if  (Input.GetMouseButtonDown(1) && dipegang != null)
+            {
+                Destroy(dipegang);
+                dipegang = null;
+            }
         }
 
-        udahdipegang = false;
     }
 
     private void OnMouseDown()
-    {      
+    {
+
+        bidcontrol[] SemuaBak = FindObjectsOfType<bidcontrol>();
+
+        foreach (bidcontrol BakAktif in SemuaBak)
+        {
+            if(BakAktif.dipegang != null) 
+            {
+            return;
+            }
+        }
+
+
         if (dipegang == null)
         {
             dipegang = Instantiate(HoldItemOBJ, transform.position, Quaternion.identity);
-            udahdipegang = true;
         }
+        
     }
 }

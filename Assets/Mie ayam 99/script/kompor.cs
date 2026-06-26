@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class kompor : MonoBehaviour
 {
-    public bidcontrol tanganpemain;
-    public bidcontrol tanganpemain2;
+    public bidcontrol Mie;
+    public bidcontrol Baso;
     public GameObject HoldMieMateng;
     public GameObject HoldBasoMateng;
     public Slider barwaktu;
@@ -15,7 +15,7 @@ public class kompor : MonoBehaviour
     public float WaktuMasakMie = 10f;
     public float WaktuMasakBaso = 10f;
 
-    // 0 = Kosong, 1 = Masak, 2 = Matang
+    // 0 = Kosong, 1 = Masak, 2 = Matang (untuk mie)
     private int statusKompor = 0;
     private float waktuMasakSekarang = 0f;
     void Start()
@@ -54,10 +54,11 @@ public class kompor : MonoBehaviour
     void OnMouseDown()
     {
         //mie
-        if (statusKompor == 0 && tanganpemain.dipegang != null && tanganpemain.dipegang.name.Contains("HoldMie"))
+        if (statusKompor == 0 && Mie.dipegang != null && Mie.dipegang.name.Contains("HoldMie"))
         {
-            Destroy(tanganpemain.dipegang);
-            tanganpemain.dipegang = null;
+            Destroy(Mie.dipegang);
+            Mie.dipegang = null;
+          
 
             statusKompor = 1;
             waktuMasakSekarang = 0f;
@@ -66,20 +67,20 @@ public class kompor : MonoBehaviour
             barwaktu.gameObject.SetActive(true);
         }
 
-        else if (statusKompor == 2 && tanganpemain.dipegang == null)
+        else if (statusKompor == 2 && Mie.dipegang == null)
         {
 
-            tanganpemain.dipegang = Instantiate(HoldMieMateng, tanganpemain.transform.position, Quaternion.identity);
+            Mie.dipegang = Instantiate(HoldMieMateng, Mie.transform.position, Quaternion.identity);
 
             statusKompor = 0;
             barwaktu.gameObject.SetActive(false);
         }
 
         //baso
-        if (statusKompor == 0 && tanganpemain2.dipegang != null && tanganpemain2.dipegang.name.Contains("HoldBaso"))
+        if (statusKompor == 0 && Baso.dipegang != null && Baso.dipegang.name.Contains("HoldBaso"))
         {
-            Destroy(tanganpemain2.dipegang);
-            tanganpemain2.dipegang = null;
+            Destroy(Baso.dipegang);
+            Baso.dipegang = null;
 
             statusKompor = 4;
             waktuMasakSekarang = 0f;
@@ -88,10 +89,10 @@ public class kompor : MonoBehaviour
             barwaktu.gameObject.SetActive(true);
         }
 
-        else if (statusKompor == 5 && tanganpemain2.dipegang == null)
+        else if (statusKompor == 5 && Baso.dipegang == null)
         {
 
-            tanganpemain2.dipegang = Instantiate(HoldBasoMateng, tanganpemain2.transform.position, Quaternion.identity);
+            Baso.dipegang = Instantiate(HoldBasoMateng, Baso.transform.position, Quaternion.identity);
 
             statusKompor = 0;
             barwaktu.gameObject.SetActive(false);

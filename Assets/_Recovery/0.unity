@@ -272,8 +272,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57f25a57bd37c5e4ebd62b5f9543700d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
-  Mie: {fileID: 2002788887}
-  Baso: {fileID: 834859765}
+  Tanganpemain: {fileID: 2002788887}
+  Tanganpemain2: {fileID: 834859765}
   Visualmiedimangkok: {fileID: 809496824}
   Totalbaso: 0
 --- !u!1 &401455151
@@ -1800,8 +1800,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1024342211}
   - component: {fileID: 1024342210}
-  - component: {fileID: 1024342212}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: HoldBaso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1883,42 +1882,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &1024342212
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1024342209}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 20.349998
 --- !u!1 &1163996530
 GameObject:
   m_ObjectHideFlags: 0
@@ -2163,8 +2126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f0f4ebd5dc8ae84aa7fd500e887368a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Mie: {fileID: 2002788887}
-  Baso: {fileID: 834859765}
+  tanganpemain: {fileID: 2002788887}
+  tanganpemain2: {fileID: 834859765}
   HoldMieMateng: {fileID: 897668396}
   HoldBasoMateng: {fileID: 1601938190}
   barwaktu: {fileID: 1538741615}
@@ -2345,7 +2308,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1601938192}
   - component: {fileID: 1601938191}
-  - component: {fileID: 1601938193}
   m_Layer: 2
   m_Name: HoldBasoMateng
   m_TagString: Untagged
@@ -2428,42 +2390,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &1601938193
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601938190}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 20.349998
 --- !u!1 &1603720724
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,10 +1,13 @@
 using UnityEngine;
+using System.Collections;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class Mangkok : MonoBehaviour
 {
-    public bidcontrol Tanganpemain;
-    public bidcontrol Tanganpemain2;
+    public bidcontrol Mie;
+    public bidcontrol Baso;
     public GameObject Visualmiedimangkok;
+
+ 
 
     //sistem baso di itunh
     public int Totalbaso= 0;
@@ -13,36 +16,40 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
     void Start()
     {
-        Visualmiedimangkok.SetActive(false);
+        
     }
 
 
     void Update()
     {
-                
+        
+
     }
 
     void OnMouseDown() 
     {
         //ini pokonya buat mi di masukin ke mangkok
-        if (Mangkokterisi == false && Tanganpemain.dipegang != null && Tanganpemain.dipegang.name.Contains("HoldMieMateng"))
+        if (Mangkokterisi == false && Mie.dipegang != null && Mie.dipegang.name.Contains("HoldMieMateng"))
         {
-            Destroy(Tanganpemain.dipegang);
-            Tanganpemain.dipegang = null;
+            Destroy(Mie.dipegang);
+            Mie.dipegang = null;
             Mangkokterisi = true;
             Visualmiedimangkok.SetActive(true);
         }
 
         //ini bwat basooo
-        if (Mangkokterisi == true && Tanganpemain2.dipegang != null && Tanganpemain2.dipegang.name.Contains("HoldBasoMateng"))
+        if (Mangkokterisi == true && Baso.dipegang != null && Baso.dipegang.name.Contains("HoldBasoMateng"))
         {
-            GameObject Placedbaso = Tanganpemain2.dipegang;
-            Tanganpemain2.dipegang = null;
+            GameObject Placedbaso = Baso.dipegang;
+            Baso.dipegang = null;
 
             Placedbaso.transform.SetParent(this.transform);
+
             Totalbaso = Totalbaso + 1;
             Debug.Log("Total Baso di mangkok sekarang: " + Totalbaso);
+
         }
+         
         
     }
 }
