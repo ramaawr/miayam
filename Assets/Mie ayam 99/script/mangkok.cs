@@ -5,9 +5,12 @@ public class Mangkok : MonoBehaviour
 {
     public bidcontrol Mie;
     public bidcontrol Baso;
+    public bidcontrol Ayam;
     public GameObject Visualmiedimangkok;
+    public GameObject Visualayamdimangkok;
 
     public int Totalbaso = 0;
+    public int TotalAyam = 0;
 
     private bool Mangkokterisi = false;
 
@@ -36,18 +39,29 @@ public class Mangkok : MonoBehaviour
             // Ini akan: set flag false, kembalikan z, dan set parent ke mangkok
             basoYangDipindah.SelesaiPindah(this.transform);
             Debug.Log("Bakso berhasil dipindahkan ke posisi baru di mangkok!");
-            return; // Selesai, jangan lanjut ke logika di bawah
+            return; 
         }
 
-        // ============================================================
-        // PRIORITAS 2: Masukkan mie mateng ke mangkok (logika lama, tidak berubah)
-        // ============================================================
+       //munculin hiden objek
+
+        //mie
         if (Mangkokterisi == false && Mie.dipegang != null && Mie.dipegang.name.Contains("HoldMieMateng"))
         {
             Destroy(Mie.dipegang);
             Mie.dipegang = null;
             Mangkokterisi = true;
             Visualmiedimangkok.SetActive(true);
+        }
+
+        //ayyyam
+        if (Mangkokterisi == true && Ayam.dipegang != null && Ayam.dipegang.name.Contains("ayam"))
+        {
+            Destroy(Ayam.dipegang);
+            Ayam.dipegang = null;
+            
+            Visualayamdimangkok.SetActive(true);
+            TotalAyam = TotalAyam + 1;
+            Debug.Log("ada ayam nih" + TotalAyam);
         }
 
         // ============================================================
