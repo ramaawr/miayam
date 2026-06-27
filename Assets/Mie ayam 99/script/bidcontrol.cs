@@ -25,6 +25,13 @@ public class bidcontrol : MonoBehaviour
             mousePos.z = 0f;
             dipegang.transform.position = mousePos;
 
+            float putaranMouse = Input.mouseScrollDelta.y; 
+
+            if (putaranMouse != 0) 
+            {
+                dipegang.transform.Rotate(0, 0, putaranMouse * 15f);
+            }
+
             if  (Input.GetMouseButtonDown(1) && dipegang != null)
             {
                 Destroy(dipegang);

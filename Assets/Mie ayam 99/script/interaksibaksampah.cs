@@ -45,5 +45,23 @@ public class interaksibaksampah : MonoBehaviour
                 return;
             }
         }
+
+        interaksisayur[] semuasayur = FindObjectsOfType<interaksisayur>();
+        foreach (interaksisayur sayur in semuasayur)
+        {
+            if (sayur.sayursedangDipindahkan == true)
+            {
+                Destroy(sayur.gameObject);
+                sayur.sayursedangDipindahkan = false;
+
+                Mangkok mangkoks = FindObjectOfType<Mangkok>();
+                if (mangkoks != null)
+                {
+                    mangkoks.TotalSayur -= 1;
+                    Debug.Log("Sayur dibuang! Sisa memori baso di mangkok: " + mangkoks.TotalSayur);
+                }
+                return;
+            }
+        }
     }
 }
