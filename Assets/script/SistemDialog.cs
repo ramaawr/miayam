@@ -32,11 +32,15 @@ public struct DataDialog
     public string pilihan1_Teks;
     // ID dialog tujuan jika Tombol Pilihan 1 diklik
     public string pilihan1_NextID;
+    // Efek penambahan/pengurangan moralitas NPC jika Pilihan 1 dipilih (misal: 10 atau -10)
+    public int pilihan1_EfekMoralitas;
 
     // Teks yang muncul di Tombol Pilihan 2
     public string pilihan2_Teks;
     // ID dialog tujuan jika Tombol Pilihan 2 diklik
     public string pilihan2_NextID;
+    // Efek penambahan/pengurangan moralitas NPC jika Pilihan 2 dipilih
+    public int pilihan2_EfekMoralitas;
 }
 
 public class SistemDialog : MonoBehaviour
@@ -71,6 +75,10 @@ public class SistemDialog : MonoBehaviour
     
     // Kecepatan mesin tik mengetik huruf demi huruf (semakin kecil, semakin cepat).
     [SerializeField] private float kecepatanKetik = 0.04f;
+
+    [Header("Referensi NPC (Opsional)")]
+    // Referensi ke script NPCMoralitas, dipakai jika dialog ini akan memengaruhi moralitas/health NPC.
+    [SerializeField] private NPCMoralitas npcTarget;
 
     // Data dialog yang saat ini sedang aktif berjalan di layar.
     private DataDialog dialogAktif;
@@ -242,12 +250,24 @@ public class SistemDialog : MonoBehaviour
     // Fungsi pembantu tanpa parameter untuk dihubungkan ke tombol Pilihan 1 di Unity UI onClick
     public void PilihOpsi1()
     {
+        // Berikan efek moralitas ke NPC jika target NPC dipasang di inspector
+        if (npcTarget != null && dialogAktif.pilihan1_EfekMoralitas != 0)
+        {
+            npcTarget.UbahMoralitas(dialogAktif.pilihan1_EfekMoralitas);
+        }
+        
         PilihCabang(dialogAktif.pilihan1_NextID);
     }
 
     // Fungsi pembantu tanpa parameter untuk dihubungkan ke tombol Pilihan 2 di Unity UI onClick
     public void PilihOpsi2()
     {
+        // Berikan efek moralitas ke NPC jika target NPC dipasang di inspector
+        if (npcTarget != null && dialogAktif.pilihan2_EfekMoralitas != 0)
+        {
+            npcTarget.UbahMoralitas(dialogAktif.pilihan2_EfekMoralitas);
+        }
+        
         PilihCabang(dialogAktif.pilihan2_NextID);
     }
 
