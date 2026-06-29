@@ -18,6 +18,71 @@ public class Mangkok : MonoBehaviour
     private bool Mangkokterisiayam = false;
     private bool Mangkokterisisayur = false;
 
+    // =========================================================================
+    // PROPERTI PUBLIK — Supaya script lain (TombolAntarPesanan) bisa
+    // mengecek apakah mangkok ada isinya, tanpa bisa mengubah nilainya langsung.
+    // Cara baca dari script lain: mangkok.AdaMie → true/false
+    // =========================================================================
+    public bool AdaMie
+    {
+        get { return Mangkokterisi; }
+    }
+
+    // =========================================================================
+    // KosongkanMangkokDapur — Mengosongkan mangkok dapur secara total
+    // Membersihkan data internal, mematikan visual, dan menghancurkan topping.
+    // =========================================================================
+    public void KosongkanMangkokDapur()
+    {
+        // 1. Reset semua flag boolean
+        Mangkokterisi = false;
+        Mangkokterisiayam = false;
+        Mangkokterisisayur = false;
+
+        // 2. Reset semua counter
+        Totalbaso = 0;
+        TotalAyam = 0;
+        TotalSayur = 0;
+
+        // 3. Matikan visual mie dan ayam di mangkok
+        if (Visualmiedimangkok != null)
+        {
+            Visualmiedimangkok.SetActive(false);
+        }
+        if (Visualayamdimangkok != null)
+        {
+            Visualayamdimangkok.SetActive(false);
+        }
+
+        // 4. Hapus semua klon topping (bakso & sayur) yang ada di mangkok
+        // Loop mundur (dari belakang) supaya index transform child aman saat dihapus
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform anak = transform.GetChild(i);
+
+            // Cek apakah child ini adalah topping (punya InteraksiBaso atau interaksisayur)
+            bool adalahBaso = anak.GetComponent<InteraksiBaso>() != null;
+            bool adalahSayur = anak.GetComponent<interaksisayur>() != null;
+
+            if (adalahBaso || adalahSayur)
+            {
+                Destroy(anak.gameObject);
+            }
+        }
+
+        Debug.Log("Mangkok dapur berhasil dikosongkan secara total (visual & data).");
+    }
+
+    // =========================================================================
+    // ResetMangkok — Mengosongkan mangkok ke kondisi awal
+    // Dipanggil oleh TombolAntarPesanan saat pemain mengantar pesanan
+    // =========================================================================
+    public void ResetMangkok()
+    {
+        KosongkanMangkokDapur();
+    }
+
+
     void Start()
     {
 
