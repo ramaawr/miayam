@@ -1,10 +1,22 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Mie ayam 99/Sprites/topmangkok.png.meta
+guid: 9c885ebd55eece74eaf63da98ccc682a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4366420682216158086
+    second: topmangkok_0
+  - first:
+      213: 1740289775388360169
+    second: topmangkok_1
+========
 guid: 95a94d393ae87594cbb8cd581c30fda4
 TextureImporter:
   internalIDToNameTable:
   - first:
       213: 6219433823331393775
     second: scene_screenshot_0
+>>>>>>>> origin/Rasyid:Assets/Screenshots/scene_screenshot.png.meta
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -97,19 +109,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -139,6 +138,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
+<<<<<<<< HEAD:Assets/Mie ayam 99/Sprites/topmangkok.png.meta
+      name: topmangkok_0
+      rect:
+        serializedVersion: 2
+        x: 473
+        y: 478
+        width: 3804
+        height: 3796
+========
       name: scene_screenshot_0
       rect:
         serializedVersion: 2
@@ -146,6 +154,7 @@ TextureImporter:
         y: 0
         width: 1149
         height: 407
+>>>>>>>> origin/Rasyid:Assets/Screenshots/scene_screenshot.png.meta
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +163,35 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
+<<<<<<<< HEAD:Assets/Mie ayam 99/Sprites/topmangkok.png.meta
+      spriteID: a7c4698168b5763c0800000000000000
+      internalID: -4366420682216158086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: topmangkok_1
+      rect:
+        serializedVersion: 2
+        x: 3958
+        y: 338
+        width: 488
+        height: 378
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ed744c8450c62810800000000000000
+      internalID: 1740289775388360169
+========
       spriteID: fe0a7bf3c1edf4650800000000000000
       internalID: 6219433823331393775
+>>>>>>>> origin/Rasyid:Assets/Screenshots/scene_screenshot.png.meta
       vertices: []
       indices: 
       edges: []
@@ -174,7 +210,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
+<<<<<<<< HEAD:Assets/Mie ayam 99/Sprites/topmangkok.png.meta
+      topmangkok_0: -4366420682216158086
+      topmangkok_1: 1740289775388360169
+========
       scene_screenshot_0: 6219433823331393775
+>>>>>>>> origin/Rasyid:Assets/Screenshots/scene_screenshot.png.meta
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
