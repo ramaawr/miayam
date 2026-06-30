@@ -349,11 +349,21 @@ public class NPCPelanggan : MonoBehaviour
         // Hapus NPC dari daftar aktif di GameManager
         GameManager.instance.HapusNPCDariDaftar(this);
 
-        // Beritahu LevelManager bahwa NPC ini sudah selesai dilayani 
-        // sehingga LevelManager bisa memanggil antrean berikutnya
-        if (LevelManager.instance != null)
+        // BUKAN memanggil NPCSelesaiDilayani langsung, melainkan mengecek dialog penutup dulu
+        if (profilAktif != null && profilAktif.DialogSetelahPesan != null && profilAktif.DialogSetelahPesan.Count > 0)
         {
-            LevelManager.instance.NPCSelesaiDilayani(this);
+            if (SistemDialog.instance != null)
+            {
+                SistemDialog.instance.MulaiDialogLevel(profilAktif.DialogSetelahPesan, SistemDialog.TipeDialog.SetelahPesanan);
+            }
+        }
+        else
+        {
+            // Beritahu LevelManager bahwa NPC ini sudah selesai dilayani (pulang)
+            if (LevelManager.instance != null)
+            {
+                LevelManager.instance.NPCSelesaiDilayani(this);
+            }
         }
     }
 }
