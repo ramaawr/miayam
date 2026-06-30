@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 5f7e2f2ae3bae9648b366ee0a65a8518
+guid: 320490689a9ab444e9178ce85aa3d172
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 634574539146599550
-    second: DSystem_PressButton_0
-  - first:
-      213: 4159515022060049362
-    second: DSystem_PressButton_1
+      213: 1688308104842928409
+    second: Bubble Nyamengecil (12)_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,19 +97,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -142,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: DSystem_PressButton_0
+      name: Bubble Nyamengecil (12)_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 50
-        height: 27
+        width: 4080
+        height: 2295
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -157,30 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e7c17556e267ec800800000000000000
-      internalID: 634574539146599550
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: DSystem_PressButton_1
-      rect:
-        serializedVersion: 2
-        x: 17
-        y: 21
-        width: 18
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2d35acfdfd099b930800000000000000
-      internalID: 4159515022060049362
+      spriteID: 911639cb6431e6710800000000000000
+      internalID: 1688308104842928409
       vertices: []
       indices: 
       edges: []
@@ -199,8 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      DSystem_PressButton_0: 634574539146599550
-      DSystem_PressButton_1: 4159515022060049362
+      Bubble Nyamengecil (12)_0: 1688308104842928409
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
