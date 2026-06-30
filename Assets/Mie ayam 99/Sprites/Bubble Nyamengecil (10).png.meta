@@ -1,0 +1,455 @@
+fileFormatVersion: 2
+guid: 6b93422235b7f6b47830e7e96a27943c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 281519729341504441
+    second: Bubble Nyamengecil (10)_0
+  - first:
+      213: -1628613144931329864
+    second: Bubble Nyamengecil (10)_1
+  - first:
+      213: 2104306948001311210
+    second: Bubble Nyamengecil (10)_2
+  - first:
+      213: 4013278263299940888
+    second: Bubble Nyamengecil (10)_3
+  - first:
+      213: -663997940461377050
+    second: Bubble Nyamengecil (10)_4
+  - first:
+      213: 4411842579122929151
+    second: Bubble Nyamengecil (10)_5
+  - first:
+      213: 8136578414352764087
+    second: Bubble Nyamengecil (10)_6
+  - first:
+      213: -680186056712019090
+    second: Bubble Nyamengecil (10)_7
+  - first:
+      213: -3595331564864384854
+    second: Bubble Nyamengecil (10)_8
+  - first:
+      213: 3161654120483839537
+    second: Bubble Nyamengecil (10)_9
+  - first:
+      213: 3824269378326921261
+    second: Bubble Nyamengecil (10)_10
+  - first:
+      213: 8634639977068215068
+    second: Bubble Nyamengecil (10)_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Bubble Nyamengecil (10)_0
+      rect:
+        serializedVersion: 2
+        x: 643
+        y: 442
+        width: 635
+        height: 565
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bb1aa8c3b828e300800000000000000
+      internalID: 281519729341504441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble Nyamengecil (10)_1
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 266
+        width: 590
+        height: 255
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b816d339f00669e0800000000000000
+      internalID: -1628613144931329864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble Nyamengecil (10)_2
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 64
+        width: 162
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae921062500043d10800000000000000
+      internalID: 2104306948001311210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble Nyamengecil (10)_3
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 64
+        width: 167
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8122ac4315702b730800000000000000
+      internalID: 4013278263299940888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble Nyamengecil (10)_4
+      rect:
+        serializedVersion: 2
+        x: 669
+        y: 64
+        width: 138
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e96533246109c6f0800000000000000
+      internalID: -663997940461377050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble Nyamengecil (10)_5
+      rect:
+        serializedVersion: 2
+        x: 787
+        y: 64
+        width: 75
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffdb09563730a3d30800000000000000
+      internalID: 4411842579122929151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble Nyamengecil (10)_6
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 64
+        width: 142
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bc8b9a55feeae070800000000000000
+      internalID: 8136578414352764087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble Nyamengecil (10)_7
+      rect:
+        serializedVersion: 2
+        x: 1012
+        y: 64
+        width: 155
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e63a18c926e7f86f0800000000000000
+      internalID: -680186056712019090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble Nyamengecil (10)_8
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 64
+        width: 76
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa0528a9df0da1ec0800000000000000
+      internalID: -3595331564864384854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble Nyamengecil (10)_9
+      rect:
+        serializedVersion: 2
+        x: 1218
+        y: 64
+        width: 152
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13ed612eba370eb20800000000000000
+      internalID: 3161654120483839537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble Nyamengecil (10)_10
+      rect:
+        serializedVersion: 2
+        x: 1358
+        y: 64
+        width: 75
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d20849cdcb8821530800000000000000
+      internalID: 3824269378326921261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bubble Nyamengecil (10)_11
+      rect:
+        serializedVersion: 2
+        x: 1417
+        y: 64
+        width: 153
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1bb9849f4764d770800000000000000
+      internalID: 8634639977068215068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Bubble Nyamengecil (10)_0: 281519729341504441
+      Bubble Nyamengecil (10)_1: -1628613144931329864
+      Bubble Nyamengecil (10)_10: 3824269378326921261
+      Bubble Nyamengecil (10)_11: 8634639977068215068
+      Bubble Nyamengecil (10)_2: 2104306948001311210
+      Bubble Nyamengecil (10)_3: 4013278263299940888
+      Bubble Nyamengecil (10)_4: -663997940461377050
+      Bubble Nyamengecil (10)_5: 4411842579122929151
+      Bubble Nyamengecil (10)_6: 8136578414352764087
+      Bubble Nyamengecil (10)_7: -680186056712019090
+      Bubble Nyamengecil (10)_8: -3595331564864384854
+      Bubble Nyamengecil (10)_9: 3161654120483839537
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

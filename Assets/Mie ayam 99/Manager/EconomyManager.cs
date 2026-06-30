@@ -121,7 +121,7 @@ public class EconomyManager : MonoBehaviour
         if (TeksHUDTotalUang != null)
         {
             // Mengubah teks dengan format 'Rp [jumlah]'
-            TeksHUDTotalUang.text = "Rp " + TotalUangKeseluruhan;
+            TeksHUDTotalUang.text = "RP." + TotalUangKeseluruhan;
         }
     }
 
