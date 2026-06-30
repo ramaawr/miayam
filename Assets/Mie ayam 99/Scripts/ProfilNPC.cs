@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Profil NPC Baru", menuName = "Mie Ayam/Profil NPC")]
@@ -36,6 +37,17 @@ public class ProfilNPC : ScriptableObject
     // Menentukan batas minimum dan maksimum untuk porsi sayur yang akan dipesan
     public int MinSayur = 0;
     public int MaxSayur = 3;
+    #endregion
+    
+    #region PENGATURAN DIALOG NPC
+    [Header("Pengaturan Dialog Khusus NPC")]
+    [Tooltip("Dialog yang muncul otomatis saat NPC ini baru tiba di depan gerobak, SEBELUM pesanan dibuat.")]
+    // Obrolan perkenalan atau basa-basi dari pelanggan
+    public List<BlokDialog> DialogSebelumPesan = new List<BlokDialog>();
+
+    [Tooltip("Dialog yang muncul setelah pemain menyerahkan pesanan, SEBELUM NPC pulang.")]
+    // Obrolan penutup, ucapan terima kasih, atau komplain setelah menerima makanan
+    public List<BlokDialog> DialogSetelahPesan = new List<BlokDialog>();
     #endregion
 
     #region DATA REPUTASI

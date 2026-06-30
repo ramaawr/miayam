@@ -581,8 +581,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Button
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2cc9872618482914a9339fab1972ba65, type: 2}
-  m_sharedMaterial: {fileID: 7098039588447075256, guid: 2cc9872618482914a9339fab1972ba65, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a2b30d04fb9d0594b8bdd05bd5e017af, type: 2}
+  m_sharedMaterial: {fileID: 385543170580822814, guid: a2b30d04fb9d0594b8bdd05bd5e017af, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -878,8 +878,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: EKO PRATAMA
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2cc9872618482914a9339fab1972ba65, type: 2}
-  m_sharedMaterial: {fileID: 7098039588447075256, guid: 2cc9872618482914a9339fab1972ba65, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a2b30d04fb9d0594b8bdd05bd5e017af, type: 2}
+  m_sharedMaterial: {fileID: 385543170580822814, guid: a2b30d04fb9d0594b8bdd05bd5e017af, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1082,8 +1082,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Button
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2cc9872618482914a9339fab1972ba65, type: 2}
-  m_sharedMaterial: {fileID: 7098039588447075256, guid: 2cc9872618482914a9339fab1972ba65, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a2b30d04fb9d0594b8bdd05bd5e017af, type: 2}
+  m_sharedMaterial: {fileID: 385543170580822814, guid: a2b30d04fb9d0594b8bdd05bd5e017af, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1233,8 +1233,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Haloo kawan kawan aku rama
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2cc9872618482914a9339fab1972ba65, type: 2}
-  m_sharedMaterial: {fileID: 7098039588447075256, guid: 2cc9872618482914a9339fab1972ba65, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a2b30d04fb9d0594b8bdd05bd5e017af, type: 2}
+  m_sharedMaterial: {fileID: 385543170580822814, guid: a2b30d04fb9d0594b8bdd05bd5e017af, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

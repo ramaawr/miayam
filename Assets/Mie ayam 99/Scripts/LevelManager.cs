@@ -109,8 +109,15 @@ public class LevelManager : MonoBehaviour
             // Memastikan antrean selalu dimulai dari orang pertama (indeks 0) setiap ganti level
             indexAntreanNPC = 0;
 
-            // Memanggil NPC pertama dengan waktu jeda 0 detik (langsung muncul)
-            StartCoroutine(ProsesMunculkanNPC(0f)); 
+            // Mengecek apakah ada dialog yang harus diputar sebelum mulai melayani NPC
+            if (levelAktif.DialogAwalLevel != null && levelAktif.DialogAwalLevel.Count > 0 && SistemDialog.instance != null)
+            {
+                SistemDialog.instance.MulaiDialogLevel(levelAktif.DialogAwalLevel, SistemDialog.TipeDialog.AwalLevel);
+            }
+            else
+            {
+                LanjutSetelahDialogAwal();
+            }
         }
         else
         {
@@ -118,6 +125,18 @@ public class LevelManager : MonoBehaviour
             Debug.Log("==== SEMUA LEVEL TELAH SELESAI! TELAATTT ====");
             if (TeksLevelCounter != null) TeksLevelCounter.text = "TAMAT!";
         }
+    }
+
+    // Dipanggil oleh SistemDialog setelah dialog awal selesai (Atau dipanggil langsung jika tidak ada dialog)
+    public void LanjutSetelahDialogAwal()
+    {
+        MulaiAntreanNPC();
+    }
+
+    // Fungsi khusus untuk memulai memanggil NPC pertama
+    public void MulaiAntreanNPC()
+    {
+        StartCoroutine(ProsesMunculkanNPC(0f)); 
     }
 
     // Fungsi Coroutine untuk menunggu beberapa saat sebelum menyuruh NPC berikutnya maju
@@ -129,18 +148,42 @@ public class LevelManager : MonoBehaviour
         DataLevel levelAktif = DaftarLevel[indexLevelSekarang];
         ProfilNPC profilBerikutnya = levelAktif.AntreanNPC[indexAntreanNPC];
 
-        // Menyuntikkan (inject) data profil (wajah, pesanan) ke badan NPC yang ada di scene
+        // Menyuntikkan (inject) data profil (wajah, pesanan, dialog) ke badan NPC yang ada di scene
         NPCUtama.MuatProfil(profilBerikutnya);
 
         // Menampilkan kembali NPC tersebut agar seolah-olah berjalan masuk
         NPCUtama.gameObject.SetActive(true);
 
         Debug.Log("NPC Muncul: " + profilBerikutnya.NamaNPC);
+
+        // Setelah NPC muncul, cek apakah dia punya dialog perkenalan (sebelum pesan)
+        if (profilBerikutnya.DialogSebelumPesan != null && profilBerikutnya.DialogSebelumPesan.Count > 0 && SistemDialog.instance != null)
+        {
+            SistemDialog.instance.MulaiDialogLevel(profilBerikutnya.DialogSebelumPesan, SistemDialog.TipeDialog.SebelumPesanan);
+        }
+        else
+        {
+            LanjutSetelahDialogNPC_Datang();
+        }
+    }
+
+    // Dipanggil oleh SistemDialog setelah dialog NPC perkenalan selesai (Atau dipanggil langsung)
+    public void LanjutSetelahDialogNPC_Datang()
+    {
+        // NPC sudah selesai bicara, sekarang dia menunggu diklik oleh pemain untuk memesan
+        // (Logika klik sudah ada di NPCPelanggan.cs)
+        Debug.Log("NPC siap diklik untuk memesan.");
     }
     #endregion
 
     #region TRANSAKSI DAN ANTRIAN
-    // Dipanggil oleh NPCPelanggan.cs saat pemain sudah memberikan mangkok (pesanan kelar)
+    // Dipanggil oleh SistemDialog setelah dialog penutup NPC selesai 
+    public void LanjutSetelahDialogNPC_Pulang()
+    {
+        NPCSelesaiDilayani(NPCUtama);
+    }
+
+    // Dipanggil saat NPC benar-benar selesai (setelah dialog penutup jika ada)
     public void NPCSelesaiDilayani(NPCPelanggan npc)
     {
         // Mematikan NPC di layar (seolah-olah dia pulang)
@@ -159,10 +202,26 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            // Jika semua orang di level ini sudah dilayani, akhiri level dan buka popup
-            Debug.Log("Level " + levelAktif.NomorLevel + " Selesai!");
-            TampilkanPopupResult(levelAktif.NomorLevel);
+            // Semua orang di level ini sudah habis
+            Debug.Log("Antrean Level " + levelAktif.NomorLevel + " Selesai!");
+
+            // Cek apakah ada dialog penutup level
+            if (levelAktif.DialogAkhirLevel != null && levelAktif.DialogAkhirLevel.Count > 0 && SistemDialog.instance != null)
+            {
+                SistemDialog.instance.MulaiDialogLevel(levelAktif.DialogAkhirLevel, SistemDialog.TipeDialog.AkhirLevel);
+            }
+            else
+            {
+                LanjutSetelahDialogAkhir();
+            }
         }
+    }
+
+    // Dipanggil oleh SistemDialog saat dialog akhir level selesai (atau dipanggil langsung)
+    public void LanjutSetelahDialogAkhir()
+    {
+        DataLevel levelAktif = DaftarLevel[indexLevelSekarang];
+        TampilkanPopupResult(levelAktif.NomorLevel);
     }
     #endregion
 

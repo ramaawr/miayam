@@ -15,4 +15,15 @@ public class DataLevel : ScriptableObject
     // Menyimpan urutan antrean pelanggan NPC yang akan datang ke gerobak pada level ini
     public List<ProfilNPC> AntreanNPC = new List<ProfilNPC>();
     #endregion
+
+    #region PENGATURAN DIALOG
+    [Header("Pengaturan Dialog Level")]
+    [Tooltip("Dialog yang akan muncul otomatis SEBELUM antrean NPC pertama masuk.")]
+    // Percakapan awal level saat belum ada NPC
+    public List<BlokDialog> DialogAwalLevel = new List<BlokDialog>();
+
+    [Tooltip("Dialog yang akan muncul otomatis SETELAH NPC terakhir pulang.")]
+    // Percakapan akhir level setelah semua antrean habis, sebelum layar rekap muncul
+    public List<BlokDialog> DialogAkhirLevel = new List<BlokDialog>();
+    #endregion
 }

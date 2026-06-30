@@ -4,48 +4,64 @@ using UnityEngine;
 using TMPro; // Kita pakai TextMeshPro agar tampilan teks tajam dan elegan
 using UnityEngine.UI; // Butuh ini untuk komponen Button dan UI dasar
 
-// Struct ini dibungkus dengan DataDialog untuk menyimpan konfigurasi satu blok kalimat dialog.
-// [System.Serializable] ini wajib agar isinya bisa diisi langsung lewat Unity Inspector.
 [System.Serializable]
-public struct DataDialog
+public struct BarisDialog
 {
-    [Header("ID & Alur Dialog")]
-    // ID Unik untuk menandai kalimat ini (misal: "sapaan", "pilih_bakso", "tanya_minum")
-    public string dialogID;
-
-    // Nama karakter yang nanti bakal muncul di kotak dialog
+    [Tooltip("Nama karakter yang sedang bicara pada baris ini.")]
     public string namaKarakter;
 
-    // Kalimat dialog yang diucapkan.
-    [TextArea(3, 5)]
-    public string kalimatDialog;
+    [Tooltip("Kalimat yang diucapkan.")]
+    [TextArea(2, 4)]
+    public string kalimat;
+}
 
-    // ID dialog berikutnya jika alur cerita berjalan lurus/linier (tanpa pilihan bercabang).
-    // Kosongkan atau isi "SELESAI" untuk menutup dialog setelah kalimat ini selesai.
+[System.Serializable]
+public class BlokDialog
+{
+    [Header("ID Blok (Wajib Unik)")]
+    [Tooltip("Nama ID untuk memanggil blok percakapan ini (misal: 'awal_level', 'pilih_menu')")]
+    public string dialogID;
+
+    [Header("Daftar Percakapan (Otomatis Berurutan)")]
+    [Tooltip("Kalimat-kalimat ini akan dimainkan berurutan dari atas ke bawah saat pemain klik layar.")]
+    public List<BarisDialog> barisDialog = new List<BarisDialog>();
+
+    [Header("Tujuan Setelah Blok Selesai")]
+    [Tooltip("ID Blok selanjutnya jika percakapan ini lurus tanpa pilihan. Kosongkan (atau isi 'SELESAI') jika obrolan tamat di sini.")]
     public string nextDialogID;
 
-    [Header("Pengaturan Pilihan Bercabang (Branching)")]
-    // Centang/aktifkan ini jika setelah kalimat ini selesai diketik, pemain harus memilih jawaban.
+    [Header("Pilihan Bercabang (Tampil di Akhir Blok)")]
+    [Tooltip("Centang ini jika di akhir daftar percakapan di atas, pemain harus memilih 2 opsi.")]
     public bool punyaPilihan;
 
-    // Teks yang muncul di Tombol Pilihan 1
     public string pilihan1_Teks;
-    // ID dialog tujuan jika Tombol Pilihan 1 diklik
     public string pilihan1_NextID;
-    // Efek penambahan/pengurangan moralitas NPC jika Pilihan 1 dipilih (misal: 10 atau -10)
     public int pilihan1_EfekMoralitas;
 
-    // Teks yang muncul di Tombol Pilihan 2
     public string pilihan2_Teks;
-    // ID dialog tujuan jika Tombol Pilihan 2 diklik
     public string pilihan2_NextID;
-    // Efek penambahan/pengurangan moralitas NPC jika Pilihan 2 dipilih
     public int pilihan2_EfekMoralitas;
 }
 
 public class SistemDialog : MonoBehaviour
 {
+    #region SINGLETON
+    public static SistemDialog instance;
+    #endregion
+
+    public enum TipeDialog
+    {
+        Biasa,
+        AwalLevel,
+        SebelumPesanan,
+        SetelahPesanan,
+        AkhirLevel
+    }
+
     [Header("Referensi UI Utama")]
+    // Panel blocker transparan untuk mencegah pemain klik area game (NPC/Dapur) saat dialog berlangsung.
+    [SerializeField] private GameObject panelBlocker;
+
     // Objek Panel utama yang menampung seluruh UI dialog.
     [SerializeField] private GameObject panelDialog;
     
@@ -75,10 +91,9 @@ public class SistemDialog : MonoBehaviour
     // Komponen teks pada Tombol Pilihan 2
     [SerializeField] private TextMeshProUGUI teksPilihan2;
 
-    [Header("Daftar Alur Dialog")]
-    // List seluruh baris dialog yang kamu buat. 
-    // Setiap baris harus diberi dialogID yang berbeda agar tidak tertukar!
-    [SerializeField] private List<DataDialog> daftarDialog;
+    [Header("Daftar Alur Dialog (Jika Manual)")]
+    // List seluruh blok dialog yang kamu buat secara manual. 
+    [SerializeField] private List<BlokDialog> daftarBlokDialog;
     
     // Kecepatan mesin tik mengetik huruf demi huruf (semakin kecil, semakin cepat).
     [SerializeField] private float kecepatanKetik = 0.04f;
@@ -107,8 +122,14 @@ public class SistemDialog : MonoBehaviour
     // Referensi ke script NPCMoralitas, dipakai jika dialog ini akan memengaruhi moralitas/health NPC.
     [SerializeField] private NPCMoralitas npcTarget;
 
-    // Data dialog yang saat ini sedang aktif berjalan di layar.
-    private DataDialog dialogAktif;
+    // Menyimpan tipe dialog yang sedang berjalan agar kita tahu ke mana alur gamenya setelah ini.
+    private TipeDialog tipeDialogAktif = TipeDialog.Biasa;
+
+    // Blok dialog yang saat ini sedang aktif.
+    private BlokDialog blokAktif;
+    
+    // Indeks baris percakapan yang sedang dimainkan di dalam blokAktif.
+    private int indeksBarisAktif = 0;
     
     // Pengaman (Tameng Pelindung) agar jika pemain klik brutal saat teks mengetik, tidak terjadi bug.
     private bool isTyping = false;
@@ -116,9 +137,16 @@ public class SistemDialog : MonoBehaviour
     // Menyimpan Coroutine mengetik agar bisa dihentikan paksa (skip) saat diklik tengah jalan.
     private Coroutine coroutineMengetik;
 
+    void Awake()
+    {
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
+    }
+
     void Start()
     {
         // Pas game baru mulai, kita pastikan panel dialog dan panel pilihan tersembunyi terlebih dahulu.
+        if (panelBlocker != null) panelBlocker.SetActive(false);
         if (panelDialog != null) panelDialog.SetActive(false);
         if (choicePanel != null) choicePanel.SetActive(false);
     }
@@ -155,23 +183,43 @@ public class SistemDialog : MonoBehaviour
     // Fungsi utama dengan parameter ID awal dialog, berguna jika dipicu dari script game lain.
     public void MulaiDialog(string mulaiID)
     {
-        if (daftarDialog == null || daftarDialog.Count == 0)
+        tipeDialogAktif = TipeDialog.Biasa;
+        JalankanBlok(mulaiID);
+    }
+
+    // Fungsi baru untuk memulai dialog dari kumpulan blok khusus level (Awal, Akhir, dll)
+    public void MulaiDialogLevel(List<BlokDialog> daftarBlokBaru, TipeDialog tipe)
+    {
+        if (daftarBlokBaru == null || daftarBlokBaru.Count == 0) return;
+        
+        daftarBlokDialog = daftarBlokBaru;
+        tipeDialogAktif = tipe;
+        JalankanBlok(daftarBlokDialog[0].dialogID);
+    }
+
+    // Fungsi internal untuk mereset UI dan memutar blok berdasarkan ID-nya
+    private void JalankanBlok(string mulaiID)
+    {
+        if (daftarBlokDialog == null || daftarBlokDialog.Count == 0)
         {
-            Debug.LogWarning("Daftar Dialog masih kosong! Harap isi data dialog di Inspector.");
+            Debug.LogWarning("Daftar Blok Dialog masih kosong! Harap isi data dialog.");
             return;
         }
 
-        // Cari dialog pertama berdasarkan ID awal
-        DataDialog dialogPertama = CariDialogBerdasarkanID(mulaiID);
+        // Cari blok pertama berdasarkan ID awal
+        BlokDialog blokPertama = CariBlokBerdasarkanID(mulaiID);
         
         // Jika dialog dengan ID tersebut tidak ditemukan, ambil elemen pertama saja sebagai pengaman
-        if (string.IsNullOrEmpty(dialogPertama.dialogID))
+        if (string.IsNullOrEmpty(blokPertama.dialogID))
         {
-            dialogPertama = daftarDialog[0];
+            blokPertama = daftarBlokDialog[0];
         }
 
-        dialogAktif = dialogPertama;
+        blokAktif = blokPertama;
+        indeksBarisAktif = 0; // Mulai dari baris pertama di blok ini
         
+        // Aktifkan panel blocker layar
+        if (panelBlocker != null) panelBlocker.SetActive(true);
         // Aktifkan panel utama
         panelDialog.SetActive(true);
         // Sembunyikan panel pilihan di awal
@@ -179,36 +227,46 @@ public class SistemDialog : MonoBehaviour
         // Sembunyikan tombol exit di awal dialog
         if (tombolExit != null) tombolExit.SetActive(false);
 
-        TampilkanBarisDialog();
+        TampilkanBarisSekarang();
     }
 
-    // Fungsi pembantu untuk mencari data dialog berdasarkan ID uniknya di dalam List daftarDialog
-    private DataDialog CariDialogBerdasarkanID(string id)
+    // Fungsi pembantu untuk mencari data blok berdasarkan ID uniknya di dalam List daftarBlokDialog
+    private BlokDialog CariBlokBerdasarkanID(string id)
     {
-        foreach (DataDialog data in daftarDialog)
+        foreach (BlokDialog blok in daftarBlokDialog)
         {
-            if (data.dialogID == id)
+            if (blok.dialogID == id)
             {
-                return data;
+                return blok;
             }
         }
         
         // Jika tidak ditemukan, kembalikan objek kosong/default
-        return default(DataDialog);
+        return default(BlokDialog);
     }
 
-    // Menampilkan baris dialog yang sedang aktif
-    private void TampilkanBarisDialog()
+    // Menampilkan baris dialog yang sedang aktif (berdasarkan indeksBarisAktif)
+    private void TampilkanBarisSekarang()
     {
+        // Pengaman jika blok tidak memiliki baris dialog sama sekali
+        if (blokAktif.barisDialog == null || blokAktif.barisDialog.Count == 0)
+        {
+            Debug.LogWarning("Blok dialog '" + blokAktif.dialogID + "' tidak memiliki baris percakapan!");
+            SelesaiDialog();
+            return;
+        }
+
+        BarisDialog barisSekarang = blokAktif.barisDialog[indeksBarisAktif];
+
         // Set nama karakter
-        teksNama.text = dialogAktif.namaKarakter;
+        teksNama.text = barisSekarang.namaKarakter;
 
         // Reset panel pilihan ke kondisi normal sebelum mengetik
         if (choicePanel != null) choicePanel.SetActive(false);
         // Pastikan tombol exit disembunyikan saat sedang memuat kalimat baru
         if (tombolExit != null) tombolExit.SetActive(false);
 
-        // Hentikan coroutine mengetik yang lama agar tidak tumpang dian
+        // Hentikan coroutine mengetik yang lama agar tidak tumpang tindih
         if (coroutineMengetik != null)
         {
             StopCoroutine(coroutineMengetik);
@@ -230,7 +288,7 @@ public class SistemDialog : MonoBehaviour
                 teksKalimat.fontSizeMax = ukuranFontMaksimal;
                 
                 // Langkah 3: Masukkan kalimat lengkap ke komponen teks agar TMP bisa mengukur dimensinya
-                teksKalimat.text = dialogAktif.kalimatDialog;
+                teksKalimat.text = barisSekarang.kalimat;
                 
                 // Langkah 4: Paksa TMP untuk memperbarui layout dan menghitung ukuran font optimal secara instan
                 teksKalimat.ForceMeshUpdate();
@@ -253,7 +311,7 @@ public class SistemDialog : MonoBehaviour
         }
 
         // Jalankan coroutine mengetik untuk kalimat saat ini
-        coroutineMengetik = StartCoroutine(KetikKalimat(dialogAktif.kalimatDialog));
+        coroutineMengetik = StartCoroutine(KetikKalimat(barisSekarang.kalimat));
     }
 
     // Coroutine efek mengetik mesin tik
@@ -270,15 +328,18 @@ public class SistemDialog : MonoBehaviour
 
         isTyping = false;
         
-        // Setelah kalimat selesai diketik, cek apakah dialog ini membutuhkan pilihan bercabang?
-        if (dialogAktif.punyaPilihan)
+        // Setelah kalimat selesai diketik, cek apakah ini baris terakhir di dalam blok ini?
+        if (indeksBarisAktif >= blokAktif.barisDialog.Count - 1)
         {
-            MunculkanPilihanCabang();
-        }
-        else if (ApakahDialogSelesai())
-        {
-            // Munculkan tombol exit secara otomatis saat seluruh percakapan selesai diketik
-            MunculkanTombolExit();
+            if (blokAktif.punyaPilihan)
+            {
+                MunculkanPilihanCabang();
+            }
+            else if (ApakahDialogSelesai())
+            {
+                // Jika tidak ada pilihan dan blok sudah habis, munculkan tombol exit (jika ada)
+                MunculkanTombolExit();
+            }
         }
     }
 
@@ -301,7 +362,7 @@ public class SistemDialog : MonoBehaviour
                 teksPilihan1.enableAutoSizing = false;
                 teksPilihan1.fontSize = ukuranFontPilihanMaksimal;
             }
-            teksPilihan1.text = dialogAktif.pilihan1_Teks;
+            teksPilihan1.text = blokAktif.pilihan1_Teks;
         }
 
         // Konfigurasi Auto Size untuk Teks Pilihan 2
@@ -320,7 +381,7 @@ public class SistemDialog : MonoBehaviour
                 teksPilihan2.enableAutoSizing = false;
                 teksPilihan2.fontSize = ukuranFontPilihanMaksimal;
             }
-            teksPilihan2.text = dialogAktif.pilihan2_Teks;
+            teksPilihan2.text = blokAktif.pilihan2_Teks;
         }
 
         // Aktifkan panel pilihan
@@ -328,7 +389,7 @@ public class SistemDialog : MonoBehaviour
     }
 
     // Fungsi publik yang dipanggil ketika pemain mengklik tombol pilihan pertama atau kedua.
-    // Menentukan ke ID dialog mana alur cerita akan melompat berikutnya.
+    // Menentukan ke ID blok dialog mana alur cerita akan melompat berikutnya.
     public void PilihCabang(string nextID)
     {
         // Sembunyikan kembali panel pilihan
@@ -341,44 +402,32 @@ public class SistemDialog : MonoBehaviour
             return;
         }
 
-        // Cari dialog berikutnya berdasarkan ID tujuan
-        DataDialog dialogBerikutnya = CariDialogBerdasarkanID(nextID);
-
-        if (!string.IsNullOrEmpty(dialogBerikutnya.dialogID))
-        {
-            dialogAktif = dialogBerikutnya;
-            TampilkanBarisDialog();
-        }
-        else
-        {
-            // Jika ID terdaftar tapi datanya tidak ada di list, tutup dialog demi keamanan game
-            Debug.LogWarning("Dialog dengan ID '" + nextID + "' tidak ditemukan! Dialog ditutup otomatis.");
-            SelesaiDialog();
-        }
+        // Jalankan blok baru sesuai pilihan
+        JalankanBlok(nextID);
     }
 
     // Fungsi pembantu tanpa parameter untuk dihubungkan ke tombol Pilihan 1 di Unity UI onClick
     public void PilihOpsi1()
     {
         // Berikan efek moralitas ke NPC jika target NPC dipasang di inspector
-        if (npcTarget != null && dialogAktif.pilihan1_EfekMoralitas != 0)
+        if (npcTarget != null && blokAktif.pilihan1_EfekMoralitas != 0)
         {
-            npcTarget.UbahMoralitas(dialogAktif.pilihan1_EfekMoralitas);
+            npcTarget.UbahMoralitas(blokAktif.pilihan1_EfekMoralitas);
         }
         
-        PilihCabang(dialogAktif.pilihan1_NextID);
+        PilihCabang(blokAktif.pilihan1_NextID);
     }
 
     // Fungsi pembantu tanpa parameter untuk dihubungkan ke tombol Pilihan 2 di Unity UI onClick
     public void PilihOpsi2()
     {
         // Berikan efek moralitas ke NPC jika target NPC dipasang di inspector
-        if (npcTarget != null && dialogAktif.pilihan2_EfekMoralitas != 0)
+        if (npcTarget != null && blokAktif.pilihan2_EfekMoralitas != 0)
         {
-            npcTarget.UbahMoralitas(dialogAktif.pilihan2_EfekMoralitas);
+            npcTarget.UbahMoralitas(blokAktif.pilihan2_EfekMoralitas);
         }
         
-        PilihCabang(dialogAktif.pilihan2_NextID);
+        PilihCabang(blokAktif.pilihan2_NextID);
     }
 
     // Menangani aksi tombol Next linier atau shortcut klik/keyboard
@@ -392,54 +441,55 @@ public class SistemDialog : MonoBehaviour
                 StopCoroutine(coroutineMengetik);
             }
             
-            teksKalimat.text = dialogAktif.kalimatDialog;
+            BarisDialog barisSekarang = blokAktif.barisDialog[indeksBarisAktif];
+            teksKalimat.text = barisSekarang.kalimat;
             isTyping = false;
 
-            // Karena skip, kita cek juga apakah dialog ini memicu pilihan bercabang?
-            if (dialogAktif.punyaPilihan)
+            // Karena skip, kita cek apakah ini di akhir blok?
+            if (indeksBarisAktif >= blokAktif.barisDialog.Count - 1)
             {
-                MunculkanPilihanCabang();
-            }
-            else if (ApakahDialogSelesai())
-            {
-                // Jika diskip dan ternyata dialog selesai, langsung munculkan tombol exit
-                MunculkanTombolExit();
+                if (blokAktif.punyaPilihan)
+                {
+                    MunculkanPilihanCabang();
+                }
+                else if (ApakahDialogSelesai())
+                {
+                    // Jika diskip dan ternyata blok selesai, langsung munculkan tombol exit
+                    MunculkanTombolExit();
+                }
             }
         }
-        // KONDISI 2: Jika teks sudah selesai diketik dan tidak ada pilihan bercabang
+        // KONDISI 2: Jika teks sudah selesai diketik
         else
         {
-            // Cek ke mana arah dialog berikutnya
-            string nextID = dialogAktif.nextDialogID;
-
-            // Jika tidak ada ID tujuan berikutnya atau diisi "SELESAI", akhiri percakapan
-            if (string.IsNullOrEmpty(nextID) || nextID == "SELESAI")
+            // Jika belum di baris terakhir blok, maju 1 baris
+            if (indeksBarisAktif < blokAktif.barisDialog.Count - 1)
             {
-                // Jika tombol exit dipasang di Inspector, kita tidak menutup otomatis lewat klik kiri sembarang
-                // melainkan membiarkan pemain mengklik tombol Exit secara manual.
-                if (tombolExit != null)
+                indeksBarisAktif++;
+                TampilkanBarisSekarang();
+            }
+            // Jika sudah di baris terakhir, cek kelanjutan blok
+            else
+            {
+                // Cek ke mana arah blok berikutnya
+                string nextID = blokAktif.nextDialogID;
+
+                // Jika tidak ada ID tujuan berikutnya atau diisi "SELESAI", akhiri percakapan
+                if (string.IsNullOrEmpty(nextID) || nextID == "SELESAI")
                 {
+                    // Jika tombol exit dipasang di Inspector, biarkan pemain mengklik tombol Exit secara manual.
+                    if (tombolExit != null)
+                    {
+                        return;
+                    }
+
+                    // Jika tombol exit tidak dipasang (opsional), klik kiri sembarang tetap menutup dialog
+                    SelesaiDialog();
                     return;
                 }
 
-                // Jika tombol exit tidak dipasang (opsional), klik kiri sembarang tetap menutup dialog
-                SelesaiDialog();
-                return;
-            }
-
-            // Muat dialog berikutnya berdasarkan ID
-            DataDialog dialogBerikutnya = CariDialogBerdasarkanID(nextID);
-
-            if (!string.IsNullOrEmpty(dialogBerikutnya.dialogID))
-            {
-                dialogAktif = dialogBerikutnya;
-                TampilkanBarisDialog();
-            }
-            else
-            {
-                // Jika ID tujuan diisi tapi datanya tidak ditemukan di daftarDialog
-                Debug.LogWarning("Dialog dengan ID '" + nextID + "' tidak ditemukan! Dialog ditutup.");
-                SelesaiDialog();
+                // Muat blok berikutnya berdasarkan ID
+                JalankanBlok(nextID);
             }
         }
     }
@@ -449,13 +499,15 @@ public class SistemDialog : MonoBehaviour
     {
         // Dialog dianggap selesai jika:
         // 1. Teks tidak sedang dalam proses mengetik (typewriter selesai)
-        // 2. ID dialog berikutnya kosong atau berisi "SELESAI"
-        // 3. Dialog ini tidak memiliki pilihan bercabang yang menggantung
+        // 2. Baris yang sedang dibaca adalah baris terakhir di dalam blok
+        // 3. ID blok berikutnya kosong atau berisi "SELESAI"
+        // 4. Blok ini tidak memiliki pilihan bercabang yang menggantung
         bool tidakSedangMengetik = !isTyping;
-        bool tidakAdaDialogBerikutnya = string.IsNullOrEmpty(dialogAktif.nextDialogID) || dialogAktif.nextDialogID == "SELESAI";
-        bool tidakAdaPilihan = !dialogAktif.punyaPilihan;
+        bool sudahDiAkhirBaris = indeksBarisAktif >= blokAktif.barisDialog.Count - 1;
+        bool tidakAdaDialogBerikutnya = string.IsNullOrEmpty(blokAktif.nextDialogID) || blokAktif.nextDialogID == "SELESAI";
+        bool tidakAdaPilihan = !blokAktif.punyaPilihan;
 
-        return tidakSedangMengetik && tidakAdaDialogBerikutnya && tidakAdaPilihan;
+        return tidakSedangMengetik && sudahDiAkhirBaris && tidakAdaDialogBerikutnya && tidakAdaPilihan;
     }
 
     // Menampilkan tombol exit secara aktif jika referensinya dipasang di Inspector
@@ -475,10 +527,22 @@ public class SistemDialog : MonoBehaviour
         // ATAU jika dialog dari sistem memang sudah selesai secara alami.
         if (paksa || ApakahDialogSelesai())
         {
+            if (panelBlocker != null) panelBlocker.SetActive(false);
             if (panelDialog != null) panelDialog.SetActive(false);
             if (choicePanel != null) choicePanel.SetActive(false);
             // Sembunyikan kembali tombol exit saat panel dialog ditutup
             if (tombolExit != null) tombolExit.SetActive(false);
+
+            // Beri tahu LevelManager kelanjutan alur berdasarkan tipe dialog yang baru selesai
+            if (LevelManager.instance != null)
+            {
+                if (tipeDialogAktif == TipeDialog.AwalLevel) LevelManager.instance.LanjutSetelahDialogAwal();
+                else if (tipeDialogAktif == TipeDialog.AkhirLevel) LevelManager.instance.LanjutSetelahDialogAkhir();
+                else if (tipeDialogAktif == TipeDialog.SebelumPesanan) LevelManager.instance.LanjutSetelahDialogNPC_Datang();
+                else if (tipeDialogAktif == TipeDialog.SetelahPesanan) LevelManager.instance.LanjutSetelahDialogNPC_Pulang();
+            }
+
+            tipeDialogAktif = TipeDialog.Biasa;
         }
         else
         {
