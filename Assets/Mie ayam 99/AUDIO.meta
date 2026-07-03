@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Mie ayam 99/AUDIO.meta
 guid: ed4c84f8f5744424ead9a6e829c7fe5d
+========
+guid: d483dfc02e453894288f47552afe1ef5
+>>>>>>>> 30c04ff1738c2af468771d1505836e941b78dd11:Assets/Scenes.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

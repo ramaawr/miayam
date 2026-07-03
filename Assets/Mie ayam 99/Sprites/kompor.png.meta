@@ -1,10 +1,19 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Mie ayam 99/Sprites/kompor.png.meta
 guid: efd22f31748f1434c9ee0825234bf073
 TextureImporter:
   internalIDToNameTable:
   - first:
       213: -731934549035664634
     second: kompor_0
+========
+guid: 7b432fa8471bc054eb591c944999ab2f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3482287859761805308
+    second: Group 189_0
+>>>>>>>> origin/Rasyid:Assets/Mie ayam 99/Sprites/Group 189.png.meta
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +135,22 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
+<<<<<<<< HEAD:Assets/Mie ayam 99/Sprites/kompor.png.meta
       name: kompor_0
+========
+      name: Group 189_0
+>>>>>>>> origin/Rasyid:Assets/Mie ayam 99/Sprites/Group 189.png.meta
       rect:
         serializedVersion: 2
         x: 0
         y: 0
+<<<<<<<< HEAD:Assets/Mie ayam 99/Sprites/kompor.png.meta
         width: 4250
         height: 4250
+========
+        width: 1498
+        height: 244
+>>>>>>>> origin/Rasyid:Assets/Mie ayam 99/Sprites/Group 189.png.meta
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +159,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
+<<<<<<<< HEAD:Assets/Mie ayam 99/Sprites/kompor.png.meta
       spriteID: 60bb4e5d765a7d5f0800000000000000
       internalID: -731934549035664634
+========
+      spriteID: 4080e3934ad6cafc0800000000000000
+      internalID: -3482287859761805308
+>>>>>>>> origin/Rasyid:Assets/Mie ayam 99/Sprites/Group 189.png.meta
       vertices: []
       indices: 
       edges: []
@@ -161,7 +184,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
+<<<<<<<< HEAD:Assets/Mie ayam 99/Sprites/kompor.png.meta
       kompor_0: -731934549035664634
+========
+      Group 189_0: -3482287859761805308
+>>>>>>>> origin/Rasyid:Assets/Mie ayam 99/Sprites/Group 189.png.meta
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
