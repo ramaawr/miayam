@@ -35,6 +35,7 @@ public class kompor : MonoBehaviour
             if (waktuMasakSekarang >= WaktuMasakMie)
             {
                 statusKompor = 2;
+                if (TryGetComponent<JuiceAnimator>(out var juice)) juice.PlayPopAnimation();
             }
         }
 
@@ -47,6 +48,7 @@ public class kompor : MonoBehaviour
             if (waktuMasakSekarang >= WaktuMasakBaso)
             {
                 statusKompor = 5;
+                if (TryGetComponent<JuiceAnimator>(out var juice)) juice.PlayPopAnimation();
             }
         }
     }
@@ -65,6 +67,7 @@ public class kompor : MonoBehaviour
 
             barwaktu.value = 0f;
             barwaktu.gameObject.SetActive(true);
+            if (TryGetComponent<JuiceAnimator>(out var juice)) juice.StartCookingWobble();
         }
 
         else if (statusKompor == 2 && Mie.dipegang == null)
@@ -74,6 +77,7 @@ public class kompor : MonoBehaviour
 
             statusKompor = 0;
             barwaktu.gameObject.SetActive(false);
+            if (TryGetComponent<JuiceAnimator>(out var juice)) juice.StopAnimation();
         }
 
         //baso
@@ -87,6 +91,7 @@ public class kompor : MonoBehaviour
 
             barwaktu.value = 0f;
             barwaktu.gameObject.SetActive(true);
+            if (TryGetComponent<JuiceAnimator>(out var juice)) juice.StartCookingWobble();
         }
 
         else if (statusKompor == 5 && Baso.dipegang == null)
@@ -96,6 +101,7 @@ public class kompor : MonoBehaviour
 
             statusKompor = 0;
             barwaktu.gameObject.SetActive(false);
+            if (TryGetComponent<JuiceAnimator>(out var juice)) juice.StopAnimation();
         }
 
     }

@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DataLevel
   NomorLevel: 1
   AntreanNPC:
-  - {fileID: 11400000, guid: 22443b73fc054764ab39875dcfe24749, type: 2}
-  - {fileID: 11400000, guid: eaebd6aa86287cf49bd64bd369926ca8, type: 2}
+  - {fileID: 11400000, guid: b368d479b88ed124f89e60be23ec1e25, type: 2}
   - {fileID: 11400000, guid: 0dc419a675e0dbd44927b889ea544d0f, type: 2}
+  DialogAwalLevel: {fileID: 0}
+  DialogAkhirLevel: {fileID: 0}
+  DialogMoralitasAkhirLevel: {fileID: 11400000, guid: 06d64ce052314eb40b8d7eeedc5a6f9d, type: 2}

@@ -89,6 +89,12 @@ public class NPCPelanggan : MonoBehaviour
     // =========================================================================
     [Header("Status NPC (Otomatis, jangan diedit)")]
     public bool SudahPesan = false; // Apakah NPC ini sudah punya pesanan yang belum dilayani?
+    
+    // "Tameng Pelindung" untuk mencegah race condition (double click) saat NPC sudah diberi makan
+    public bool sedangPulang = false; 
+    
+    // "Tameng Pelindung" untuk mencegah race condition saat NPC sedang berdialog sebelum order
+    public bool sedangBicara = false;
 
     // Data pesanan yang sedang aktif untuk NPC ini
     // (disimpan di NPC masing-masing, bukan di GameManager,
@@ -104,6 +110,9 @@ public class NPCPelanggan : MonoBehaviour
     // =========================================================================
     void OnMouseDown()
     {
+        // ----- GUARD: Tameng Pelindung (Mencegah Race Condition) -----
+        if (sedangPulang || sedangBicara) return;
+
         // ----- GUARD: Cek apakah pemain ada di Area Depan ----- 
         // Kalau masih di dapur, NPC tidak bisa diinteraksi
         if (GameManager.instance == null)
@@ -140,7 +149,20 @@ public class NPCPelanggan : MonoBehaviour
         // =================================================================
         if (SudahPesan == false)
         {
-            BuatPesananBaru();
+            // Memeriksa apakah ada dialog cerita sebelum order makanan
+            if (DialogueManager.instance != null && profilAktif != null && profilAktif.DialogSebelumOrder != null)
+            {
+                // Nyalakan tameng sedangBicara agar tidak bisa diklik lagi saat dialog berjalan
+                sedangBicara = true;
+
+                // Mainkan dialog terlebih dahulu, baru panggil BuatPesananBaru setelah dialog selesai
+                DialogueManager.instance.MulaiDialog(profilAktif.DialogSebelumOrder, BuatPesananBaru);
+            }
+            else
+            {
+                // Jika tidak ada dialog, langsung buat pesanan baru secara normal
+                BuatPesananBaru();
+            }
             return;
         }
 
@@ -205,6 +227,8 @@ public class NPCPelanggan : MonoBehaviour
 
         // Reset status (berjaga-jaga saat di-reuse)
         SudahPesan = false;
+        sedangPulang = false; // Mematikan tameng perlindungan
+        sedangBicara = false; // Mematikan tameng perlindungan dialog
 
         // Pastikan PesananAktif tidak null sebelum di-reset
         if (PesananAktif == null)
@@ -233,6 +257,9 @@ public class NPCPelanggan : MonoBehaviour
     // =========================================================================
     private void BuatPesananBaru()
     {
+        // Matikan tameng bicara karena dialog (jika ada) sudah selesai
+        sedangBicara = false;
+
         // Pastikan PesananAktif tidak null
         if (PesananAktif == null)
         {
@@ -291,6 +318,9 @@ public class NPCPelanggan : MonoBehaviour
     // =========================================================================
     private void SerahkanPesanan()
     {
+        // Mengaktifkan tameng agar NPC tidak bisa diklik lagi selama proses animasi pulang berjalan
+        sedangPulang = true;
+
         // Ambil data bawaan pemain dari GameManager
         DataPesanan bawaan = GameManager.instance.BawaanPemain;
 
@@ -320,14 +350,7 @@ public class NPCPelanggan : MonoBehaviour
                 bubbleChat.TampilkanFeedback("Hmm, ini bukan pesananku... tapi ya sudah.");
             }
 
-            // Catat kesalahan ke memori ProfilNPC (Untuk fitur masa depan)
-            // Karena menggunakan ScriptableObject, nilai ini akan tersimpan dan
-            // bisa berefek di level selanjutnya!
-            if (profilAktif != null)
-            {
-                profilAktif.JumlahKesalahanPemain++;
-                Debug.Log("Pemain membuat kesalahan pada NPC: " + profilAktif.NamaNPC + " | Total kesalahan: " + profilAktif.JumlahKesalahanPemain);
-            }
+
         }
 
         // Panggil sistem ekonomi untuk menghitung uang dari pesanan ini
@@ -349,17 +372,42 @@ public class NPCPelanggan : MonoBehaviour
         // Hapus NPC dari daftar aktif di GameManager
         GameManager.instance.HapusNPCDariDaftar(this);
 
-        // BUKAN memanggil NPCSelesaiDilayani langsung, melainkan mengecek dialog penutup dulu
-        if (profilAktif != null && profilAktif.DialogSetelahPesan != null && profilAktif.DialogSetelahPesan.Count > 0)
+        // Memulai coroutine untuk menunda NPC pergi agar pemain sempat membaca bubble chat feedback
+        StartCoroutine(ProsesSerahkanPesanan(pesananCocok));
+    }
+
+    private System.Collections.IEnumerator ProsesSerahkanPesanan(bool pesananCocok)
+    {
+        // Tunggu feedback bubble chat selesai (mengikuti durasi yang disetel di BubbleChat)
+        float waktuTunggu = 2.5f;
+        if (bubbleChat != null)
         {
-            if (SistemDialog.instance != null)
+            waktuTunggu = bubbleChat.DurasiFeedback;
+        }
+        
+        yield return new WaitForSeconds(waktuTunggu);
+
+        // Sembunyikan bubble chat setelah durasi habis
+        if (bubbleChat != null)
+        {
+            bubbleChat.SembunyikanBubble();
+        }
+
+        // Memeriksa apakah pesanan benar dan ada dialog setelah order (penutup NPC)
+        if (pesananCocok && DialogueManager.instance != null && profilAktif != null && profilAktif.DialogSetelahOrder != null)
+        {
+            // Mainkan dialog penutup terlebih dahulu, lalu NPC baru pergi (TinggalkanToko) setelah selesai
+            DialogueManager.instance.MulaiDialog(profilAktif.DialogSetelahOrder, () =>
             {
-                SistemDialog.instance.MulaiDialogLevel(profilAktif.DialogSetelahPesan, SistemDialog.TipeDialog.SetelahPesanan);
-            }
+                if (LevelManager.instance != null)
+                {
+                    LevelManager.instance.NPCSelesaiDilayani(this);
+                }
+            });
         }
         else
         {
-            // Beritahu LevelManager bahwa NPC ini sudah selesai dilayani (pulang)
+            // Jika pesanan salah atau tidak ada dialog penutup, NPC langsung pulang seperti biasa
             if (LevelManager.instance != null)
             {
                 LevelManager.instance.NPCSelesaiDilayani(this);
@@ -367,3 +415,4 @@ public class NPCPelanggan : MonoBehaviour
         }
     }
 }
+

@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 811b9397391922741929c06d5a308a83, type: 3}
-  m_Name: rasyid kuadrad
+  m_Name: D1 - ASEP
   m_EditorClassIdentifier: Assembly-CSharp::ProfilNPC
-  NamaNPC: rasyid kuadrad
-  VisualNPC: {fileID: -4466341596532537068, guid: 9dd9e099c1b1aec4888587dbeca1f634, type: 3}
-  DialogSebelumOrder: {fileID: 11400000, guid: b541b63b6ec0237439d2cc99d8d96420, type: 2}
+  NamaNPC: Asep
+  VisualNPC: {fileID: 7394970166828568522, guid: 6f5a3a7c050196444b2ef6e0bd6ec2d0, type: 3}
+  DialogSebelumOrder: {fileID: 11400000, guid: e8210bcd086dcf94da9fe9a52f50dc5f, type: 2}
   DialogSetelahOrder: {fileID: 0}
-  ModePesanan: 0
+  ModePesanan: 1
   PesananManual:
-    JumlahMie: 1
-    JumlahBaso: 1
-    JumlahAyam: 1
-    JumlahSayur: 1
-  MinBaso: 2
+    JumlahMie: 0
+    JumlahBaso: 0
+    JumlahAyam: 0
+    JumlahSayur: 0
+  MinBaso: 0
   MaxBaso: 3
   MinAyam: 1
   MaxAyam: 1
-  MinSayur: 1
+  MinSayur: 0
   MaxSayur: 3

@@ -141,6 +141,8 @@ public class BubbleChat : MonoBehaviour
             PanelBubble.SetActive(true);
         }
 
+        if (TryGetComponent<JuiceAnimator>(out var juice)) juice.PlayBubblePopUp();
+
         Debug.Log("BubbleChat ditampilkan: " + pesanan.TampilkanSebagaiTeks());
     }
 
@@ -172,6 +174,8 @@ public class BubbleChat : MonoBehaviour
         {
             PanelBubble.SetActive(true);
         }
+
+        if (TryGetComponent<JuiceAnimator>(out var juice)) juice.PlayBubblePopUp();
 
         // Mulai timer untuk auto-hide feedback
         // Kalau ada timer lama yang masih jalan, hentikan dulu

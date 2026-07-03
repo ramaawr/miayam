@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProfilNPC
   NamaNPC: rasyid
   VisualNPC: {fileID: 7394970166828568522, guid: 6f5a3a7c050196444b2ef6e0bd6ec2d0, type: 3}
+  DialogSebelumOrder: {fileID: 11400000, guid: 938ea6b865be2dc4291d15f30fb7fca5, type: 2}
+  DialogSetelahOrder: {fileID: 0}
   ModePesanan: 0
   PesananManual:
     JumlahMie: 1
@@ -26,4 +28,3 @@ MonoBehaviour:
   MaxAyam: 1
   MinSayur: 3
   MaxSayur: 3
-  JumlahKesalahanPemain: 1

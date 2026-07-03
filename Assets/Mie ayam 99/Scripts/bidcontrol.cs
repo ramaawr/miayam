@@ -58,6 +58,9 @@ public class bidcontrol : MonoBehaviour
         if (dipegang == null)
         {
             dipegang = Instantiate(HoldItemOBJ, transform.position, Quaternion.identity);
+            
+            // Berikan efek Pop (membesar sesaat) pada bak saat barang diambil
+            if (TryGetComponent<JuiceAnimator>(out var juice)) juice.PlayPopAnimation();
         }
         
     }

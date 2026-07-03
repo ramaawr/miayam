@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbfc6cd9f2e58bb4e859cef8b43f1e31, type: 3}
+  m_Name: Dialog rasyid h1
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequence
+  sequenceID: h1-rasyud
+  dialogueNodes:
+  - speakerName: Rasyid
+    dialogueText: pe inpokan mi ayam king
+    portraitSprite: {fileID: 7394970166828568522, guid: 6f5a3a7c050196444b2ef6e0bd6ec2d0, type: 3}
+    portraitSide: 0
+    typingSpeed: 0.1
+    audioClip: {fileID: 0}
+    jumpToNodeIndex: -1
+    choices: []
+  - speakerName: Rasyid
+    dialogueText: di tunggu bang
+    portraitSprite: {fileID: 7394970166828568522, guid: 6f5a3a7c050196444b2ef6e0bd6ec2d0, type: 3}
+    portraitSide: 0
+    typingSpeed: 0.1
+    audioClip: {fileID: 0}
+    jumpToNodeIndex: -1
+    choices: []

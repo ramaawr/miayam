@@ -12,7 +12,18 @@ public class ProfilNPC : ScriptableObject
 
     [Tooltip("Wujud gambar (Sprite) NPC ini saat muncul di gerobak")]
     // Mengatur gambar wujud 2D dari NPC yang akan dimunculkan saat pelanggan datang
-    public Sprite VisualNPC;
+        public Sprite VisualNPC;
+    #endregion
+
+    #region DATA DIALOG NPC
+    [Header("Dialog Cerita NPC")]
+    [Tooltip("Percakapan sebelum NPC memesan makanan (opsional)")]
+    // Menyimpan dialog sebelum pesanan (order bubble) muncul
+    public DialogueSequence DialogSebelumOrder;
+
+    [Tooltip("Percakapan setelah pemain menyerahkan pesanan yang benar (opsional)")]
+    // Menyimpan dialog penutup sebelum NPC pergi membawa makanan yang benar
+    public DialogueSequence DialogSetelahOrder;
     #endregion
 
     #region PENGATURAN PESANAN
@@ -39,21 +50,5 @@ public class ProfilNPC : ScriptableObject
     public int MaxSayur = 3;
     #endregion
     
-    #region PENGATURAN DIALOG NPC
-    [Header("Pengaturan Dialog Khusus NPC")]
-    [Tooltip("Dialog yang muncul otomatis saat NPC ini baru tiba di depan gerobak, SEBELUM pesanan dibuat.")]
-    // Obrolan perkenalan atau basa-basi dari pelanggan
-    public List<BlokDialog> DialogSebelumPesan = new List<BlokDialog>();
 
-    [Tooltip("Dialog yang muncul setelah pemain menyerahkan pesanan, SEBELUM NPC pulang.")]
-    // Obrolan penutup, ucapan terima kasih, atau komplain setelah menerima makanan
-    public List<BlokDialog> DialogSetelahPesan = new List<BlokDialog>();
-    #endregion
-
-    #region DATA REPUTASI
-    [Header("Data Reputasi (Untuk Pengembangan Masa Depan)")]
-    [Tooltip("Jumlah kesalahan yang pernah dilakukan pemain ke NPC ini.")]
-    // Menyimpan rekam jejak jumlah kesalahan pemain terhadap NPC ini, berguna untuk fitur penalti/reputasi nantinya
-    public int JumlahKesalahanPemain = 0;
-    #endregion
 }

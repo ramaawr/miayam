@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbfc6cd9f2e58bb4e859cef8b43f1e31, type: 3}
+  m_Name: D1S - ASEP
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequence
+  sequenceID: 1
+  dialogueNodes:
+  - speakerName: Asep
+    dialogueText: Just opened up here, Sir? I don't recall seeing a cart at this
+      corner last week.
+    portraitSprite: {fileID: 7394970166828568522, guid: 6f5a3a7c050196444b2ef6e0bd6ec2d0, type: 3}
+    portraitSide: 0
+    typingSpeed: 0.01
+    audioClip: {fileID: 0}
+    jumpToNodeIndex: -1
+    choices:
+    - choiceText: Yes, Sir. We just started today.
+      targetNodeIndex: 1
+    - choiceText: That is correct, Sir. We just started operating today. Please,
+        come by.
+      targetNodeIndex: 1
+  - speakerName: Asep
+    dialogueText: What's your name, Sir?
+    portraitSprite: {fileID: 7394970166828568522, guid: 6f5a3a7c050196444b2ef6e0bd6ec2d0, type: 3}
+    portraitSide: 0
+    typingSpeed: 0.01
+    audioClip: {fileID: 0}
+    jumpToNodeIndex: -1
+    choices:
+    - choiceText: I'm Eko, Sir. This is my son, Aldi. We are starting a business,
+        looking for regular customers in this area. Please have a seat, how many
+        bowls would you like to order?
+      targetNodeIndex: 2
+    - choiceText: I'm Eko, Sir. I just ask for your blessings so things run smoothly.
+        Please wait a moment, I'll prepare the noodles..
+      targetNodeIndex: 3
+  - speakerName: Asep
+    dialogueText: Ah, Mr. Eko. I hope the business goes well. Times like these really
+      demand hard work. Oh ya, 1 bowls please.
+    portraitSprite: {fileID: 7394970166828568522, guid: 6f5a3a7c050196444b2ef6e0bd6ec2d0, type: 3}
+    portraitSide: 0
+    typingSpeed: 0.01
+    audioClip: {fileID: 0}
+    jumpToNodeIndex: 4
+    choices: []
+  - speakerName: Asep
+    dialogueText: Amen to that, Mr. Eko. Us little folks have to pray for each other
+      nowadays.
+    portraitSprite: {fileID: 7394970166828568522, guid: 6f5a3a7c050196444b2ef6e0bd6ec2d0, type: 3}
+    portraitSide: 0
+    typingSpeed: 0.01
+    audioClip: {fileID: 0}
+    jumpToNodeIndex: -1
+    choices: []
+  - speakerName: Eko
+    dialogueText: Please wait sir, i will make the best chiken noodle for you
+    portraitSprite: {fileID: -5617772308520878989, guid: 62f2aea9592d70948babf8a186b765e8, type: 3}
+    portraitSide: 1
+    typingSpeed: 0.01
+    audioClip: {fileID: 0}
+    jumpToNodeIndex: -1
+    choices: []

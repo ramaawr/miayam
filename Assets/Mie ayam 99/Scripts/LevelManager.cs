@@ -58,6 +58,14 @@ public class LevelManager : MonoBehaviour
     [Tooltip("Teks untuk menampilkan total uang secara keseluruhan")]
     // Menampilkan seluruh uang pemain (akumulasi) di panel rekap
     public TextMeshProUGUI TeksTotalUangResult;
+
+    [Header("Transisi Level")]
+    [Tooltip("Panel UI yang menutupi layar untuk efek Fade Out/In. Wajib punya CanvasGroup.")]
+    // Ini digunakan agar layar bisa menjadi gelap/putih perlahan saat ganti hari (Fade)
+    public CanvasGroup PanelFadeTransisi;
+    
+    [Tooltip("Waktu yang dibutuhkan untuk layar menjadi gelap atau terang (dalam detik)")]
+    public float DurasiFade = 1.0f;
     #endregion
 
     #region INISIALISASI AWAL
@@ -80,6 +88,13 @@ public class LevelManager : MonoBehaviour
         if (PanelPopupResult != null)
         {
             PanelPopupResult.SetActive(false);
+        }
+        
+        // Memastikan layar tidak gelap karena fade transisi
+        if (PanelFadeTransisi != null)
+        {
+            PanelFadeTransisi.alpha = 0f;
+            PanelFadeTransisi.gameObject.SetActive(false);
         }
 
         // Langsung memulai permainan dari indeks 0 (level pertama)
@@ -109,14 +124,16 @@ public class LevelManager : MonoBehaviour
             // Memastikan antrean selalu dimulai dari orang pertama (indeks 0) setiap ganti level
             indexAntreanNPC = 0;
 
-            // Mengecek apakah ada dialog yang harus diputar sebelum mulai melayani NPC
-            if (levelAktif.DialogAwalLevel != null && levelAktif.DialogAwalLevel.Count > 0 && SistemDialog.instance != null)
+            // Memeriksa apakah ada dialog awal level untuk dimainkan terlebih dahulu
+            if (DialogueManager.instance != null && levelAktif.DialogAwalLevel != null)
             {
-                SistemDialog.instance.MulaiDialogLevel(levelAktif.DialogAwalLevel, SistemDialog.TipeDialog.AwalLevel);
+                // Memulai dialog awal level sebelum NPC pertama di-spawn
+                DialogueManager.instance.MulaiDialog(levelAktif.DialogAwalLevel, MulaiAntreanNPC);
             }
             else
             {
-                LanjutSetelahDialogAwal();
+                // Jika tidak ada dialog, langsung memulai antrean NPC secara langsung
+                MulaiAntreanNPC();
             }
         }
         else
@@ -127,11 +144,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    // Dipanggil oleh SistemDialog setelah dialog awal selesai (Atau dipanggil langsung jika tidak ada dialog)
-    public void LanjutSetelahDialogAwal()
-    {
-        MulaiAntreanNPC();
-    }
+
 
     // Fungsi khusus untuk memulai memanggil NPC pertama
     public void MulaiAntreanNPC()
@@ -156,32 +169,15 @@ public class LevelManager : MonoBehaviour
 
         Debug.Log("NPC Muncul: " + profilBerikutnya.NamaNPC);
 
-        // Setelah NPC muncul, cek apakah dia punya dialog perkenalan (sebelum pesan)
-        if (profilBerikutnya.DialogSebelumPesan != null && profilBerikutnya.DialogSebelumPesan.Count > 0 && SistemDialog.instance != null)
-        {
-            SistemDialog.instance.MulaiDialogLevel(profilBerikutnya.DialogSebelumPesan, SistemDialog.TipeDialog.SebelumPesanan);
-        }
-        else
-        {
-            LanjutSetelahDialogNPC_Datang();
-        }
-    }
-
-    // Dipanggil oleh SistemDialog setelah dialog NPC perkenalan selesai (Atau dipanggil langsung)
-    public void LanjutSetelahDialogNPC_Datang()
-    {
-        // NPC sudah selesai bicara, sekarang dia menunggu diklik oleh pemain untuk memesan
-        // (Logika klik sudah ada di NPCPelanggan.cs)
+        // NPC sudah selesai masuk dan siap menunggu diklik
         Debug.Log("NPC siap diklik untuk memesan.");
     }
+
+
     #endregion
 
     #region TRANSAKSI DAN ANTRIAN
-    // Dipanggil oleh SistemDialog setelah dialog penutup NPC selesai 
-    public void LanjutSetelahDialogNPC_Pulang()
-    {
-        NPCSelesaiDilayani(NPCUtama);
-    }
+
 
     // Dipanggil saat NPC benar-benar selesai (setelah dialog penutup jika ada)
     public void NPCSelesaiDilayani(NPCPelanggan npc)
@@ -205,27 +201,43 @@ public class LevelManager : MonoBehaviour
             // Semua orang di level ini sudah habis
             Debug.Log("Antrean Level " + levelAktif.NomorLevel + " Selesai!");
 
-            // Cek apakah ada dialog penutup level
-            if (levelAktif.DialogAkhirLevel != null && levelAktif.DialogAkhirLevel.Count > 0 && SistemDialog.instance != null)
+            // Memeriksa apakah ada dialog penutup di akhir level hari ini
+            if (DialogueManager.instance != null && levelAktif.DialogAkhirLevel != null)
             {
-                SistemDialog.instance.MulaiDialogLevel(levelAktif.DialogAkhirLevel, SistemDialog.TipeDialog.AkhirLevel);
+                // Mainkan dialog penutup terlebih dahulu sebelum masuk ke fase akhir
+                DialogueManager.instance.MulaiDialog(levelAktif.DialogAkhirLevel, () => {
+                    LanjutKeFaseAkhir(levelAktif);
+                });
             }
             else
             {
-                LanjutSetelahDialogAkhir();
+                // Langsung lanjut ke fase akhir tanpa dialog penutup
+                LanjutKeFaseAkhir(levelAktif);
             }
         }
     }
 
-    // Dipanggil oleh SistemDialog saat dialog akhir level selesai (atau dipanggil langsung)
-    public void LanjutSetelahDialogAkhir()
+    // Fungsi tambahan untuk memisahkan logika pemanggilan dialog moralitas
+    // Bertindak sebagai jembatan antara selesainya dialog biasa dan munculnya Popup Result
+    private void LanjutKeFaseAkhir(DataLevel levelAktif)
     {
-        DataLevel levelAktif = DaftarLevel[indexLevelSekarang];
-        TampilkanPopupResult(levelAktif.NomorLevel);
+        // Memeriksa apakah ada dialog moralitas yang diatur untuk level ini
+        if (MoralityManager.instance != null && levelAktif.DialogMoralitasAkhirLevel != null)
+        {
+            // Memanggil sistem moralitas, dan memerintahkan memanggil Popup Result setelahnya
+            MoralityManager.instance.MulaiDialogMoralitas(levelAktif.DialogMoralitasAkhirLevel, () => {
+                TampilkanPopupResult(levelAktif.NomorLevel);
+            });
+        }
+        else
+        {
+            // Jika tidak ada data dialog moralitas, langsung rekap pendapatan harian
+            TampilkanPopupResult(levelAktif.NomorLevel);
+        }
     }
     #endregion
 
-    #region REKAP HARIAN (POPUP RESULT)
+    #region REKAP HARIAN (POPUP RESULT) & TRANSISI BUKU HARIAN
     // Fungsi untuk memunculkan layar rekap keuangan di penghujung level
     private void TampilkanPopupResult(int nomorLevel)
     {
@@ -251,7 +263,7 @@ public class LevelManager : MonoBehaviour
         else
         {
             // Keamanan: Jika developer lupa memasukkan UI Popup, game akan otomatis lompat ke level depan
-            MulaiLevel(indexLevelSekarang + 1);
+            LanjutKeLevelBerikutnya();
         }
     }
 
@@ -264,14 +276,81 @@ public class LevelManager : MonoBehaviour
             PanelPopupResult.SetActive(false);
         }
 
+        // MENGHUBUNGKAN KE BUKU HARIAN:
+        // Jika DiaryManager sudah dipasang, tampilkan buku harian sebelum pindah level
+        if (DiaryManager.instance != null)
+        {
+            DiaryManager.instance.TampilkanBukuHarian(indexLevelSekarang);
+        }
+        else
+        {
+            // Jika tidak ada DiaryManager, langsung loncat ke proses ganti level
+            LanjutKeLevelBerikutnya();
+        }
+    }
+    
+    // Fungsi baru ini dipanggil oleh DiaryManager setelah pemain menutup panel buku harian
+    // Fungsi ini bertugas mereset uang dan memicu animasi Fade
+    public void LanjutKeLevelBerikutnya()
+    {
         // Menyuruh kasir (EconomyManager) untuk me-reset catatan uang khusus hari itu
         if (EconomyManager.instance != null)
         {
             EconomyManager.instance.ResetPendapatanHarian();
         }
 
-        // Melanjutkan game ke level berikutnya dengan menaikkan angka indeks level (+1)
-        MulaiLevel(indexLevelSekarang + 1);
+        // Mulai animasi transisi layar gelap (Fade Out), ganti data level, lalu layar terang lagi (Fade In)
+        StartCoroutine(ProsesGantiLevelDenganFadeOut(indexLevelSekarang + 1));
+    }
+    
+    // Coroutine untuk transisi antar level dengan animasi Fade yang halus
+    private IEnumerator ProsesGantiLevelDenganFadeOut(int indexBerikutnya)
+    {
+        // 1. FADE OUT (Layar berangsur menjadi tertutup/gelap/putih)
+        if (PanelFadeTransisi != null)
+        {
+            PanelFadeTransisi.gameObject.SetActive(true);
+            float waktuBerjalan = 0f;
+            
+            while (waktuBerjalan < DurasiFade)
+            {
+                // Matematika fraksi eksak: waktu berjalan per total durasi
+                // Hasilkan nilai transisi dari 0 menuju 1 secara akurat tanpa pembulatan kasar
+                float fraksiFade = waktuBerjalan / DurasiFade;
+                PanelFadeTransisi.alpha = fraksiFade;
+                
+                waktuBerjalan += Time.deltaTime;
+                yield return null; // Tunggu satu frame
+            }
+            
+            // Pastikan panel benar-benar pekat di akhir animasi
+            PanelFadeTransisi.alpha = 1f;
+        }
+        
+        // 2. GANTI LEVEL 
+        // Pada titik ini layar sedang tertutup, kita bisa mengganti level tanpa ketahuan pemain
+        MulaiLevel(indexBerikutnya);
+        
+        // 3. FADE IN (Layar berangsur menjadi tembus pandang/hilang)
+        if (PanelFadeTransisi != null)
+        {
+            float waktuBerjalan = 0f;
+            
+            while (waktuBerjalan < DurasiFade)
+            {
+                // Menghitung mundur dari pekat (1) menuju hilang (0)
+                float fraksiFade = waktuBerjalan / DurasiFade;
+                PanelFadeTransisi.alpha = 1f - fraksiFade;
+                
+                waktuBerjalan += Time.deltaTime;
+                yield return null;
+            }
+            
+            // Pastikan panel benar-benar tembus pandang di akhir
+            PanelFadeTransisi.alpha = 0f;
+            // Matikan objeknya agar tidak menghalangi pemain mengeklik objek di layar
+            PanelFadeTransisi.gameObject.SetActive(false); 
+        }
     }
     #endregion
 }

@@ -26,6 +26,12 @@ public class PindahKamerakemasak : MonoBehaviour
 
     private void OnMouseDown()
     {
+        // TAMENG PELINDUNG: Cegah klik dapur jika buku harian sedang terbuka
+        if (DiaryManager.instance != null && DiaryManager.instance.IsBukuHarianTerbuka)
+        {
+            return;
+        }
+
         // Cegah klik tembus ke objek di belakang UI (misal: Tombol Next Day menutupi area ini)
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
         {

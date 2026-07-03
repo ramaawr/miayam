@@ -16,14 +16,18 @@ public class DataLevel : ScriptableObject
     public List<ProfilNPC> AntreanNPC = new List<ProfilNPC>();
     #endregion
 
-    #region PENGATURAN DIALOG
-    [Header("Pengaturan Dialog Level")]
-    [Tooltip("Dialog yang akan muncul otomatis SEBELUM antrean NPC pertama masuk.")]
-    // Percakapan awal level saat belum ada NPC
-    public List<BlokDialog> DialogAwalLevel = new List<BlokDialog>();
+    #region DATA DIALOG LEVEL
+    [Header("Dialog Cerita Level")]
+    [Tooltip("Percakapan awal level sebelum NPC pertama muncul (opsional)")]
+    // Menyimpan dialog pembuka hari/level ini
+    public DialogueSequence DialogAwalLevel;
 
-    [Tooltip("Dialog yang akan muncul otomatis SETELAH NPC terakhir pulang.")]
-    // Percakapan akhir level setelah semua antrean habis, sebelum layar rekap muncul
-    public List<BlokDialog> DialogAkhirLevel = new List<BlokDialog>();
+    [Tooltip("Percakapan penutup level setelah semua NPC dilayani (opsional)")]
+    // Menyimpan dialog rekap/akhir hari sebelum popup skor muncul
+    public DialogueSequence DialogAkhirLevel;
+
+    [Header("Dialog Moralitas (Fase Baru)")]
+    [Tooltip("Percakapan dengan anak yang mempengaruhi moralitas sebelum rekap harian")]
+    public MoralityDialogueSequence DialogMoralitasAkhirLevel;
     #endregion
 }
