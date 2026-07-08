@@ -18,20 +18,13 @@ public class Mangkok : MonoBehaviour
     private bool Mangkokterisiayam = false;
     private bool Mangkokterisisayur = false;
 
-    // =========================================================================
-    // PROPERTI PUBLIK — Supaya script lain (TombolAntarPesanan) bisa
-    // mengecek apakah mangkok ada isinya, tanpa bisa mengubah nilainya langsung.
-    // Cara baca dari script lain: mangkok.AdaMie → true/false
-    // =========================================================================
+
     public bool AdaMie
     {
         get { return Mangkokterisi; }
     }
 
-    // =========================================================================
-    // KosongkanMangkokDapur — Mengosongkan mangkok dapur secara total
-    // Membersihkan data internal, mematikan visual, dan menghancurkan topping.
-    // =========================================================================
+   
     public void KosongkanMangkokDapur()
     {
         // 1. Reset semua flag boolean
@@ -60,11 +53,12 @@ public class Mangkok : MonoBehaviour
         {
             Transform anak = transform.GetChild(i);
 
-            // Cek apakah child ini adalah topping (punya InteraksiBaso atau interaksisayur)
+            // Cek apakah child ini adalah topping (punya InteraksiBaso, interaksisayur, atau interaksiayam)
             bool adalahBaso = anak.GetComponent<InteraksiBaso>() != null;
             bool adalahSayur = anak.GetComponent<interaksisayur>() != null;
+            bool adalahAyam = anak.GetComponent<interaksiayam>() != null;
 
-            if (adalahBaso || adalahSayur)
+            if (adalahBaso || adalahSayur || adalahAyam)
             {
                 Destroy(anak.gameObject);
             }
@@ -73,10 +67,7 @@ public class Mangkok : MonoBehaviour
         Debug.Log("Mangkok dapur berhasil dikosongkan secara total (visual & data).");
     }
 
-    // =========================================================================
-    // ResetMangkok — Mengosongkan mangkok ke kondisi awal
-    // Dipanggil oleh TombolAntarPesanan saat pemain mengantar pesanan
-    // =========================================================================
+
     public void ResetMangkok()
     {
         KosongkanMangkokDapur();
@@ -95,13 +86,7 @@ public class Mangkok : MonoBehaviour
 
     void OnMouseDown()
     {
-        // ============================================================
-        // PRIORITAS 1: Cek apakah ada bakso yang sedang dipindahkan.
-        // Kalau ada, letakkan bakso itu di posisi kursor saat ini.
-        // Ini HARUS dicek duluan sebelum logika lain, supaya klik di mangkok
-        // tidak malah menambah bakso baru saat user cuma mau mindahin bakso.
-        // ============================================================
-
+        
         //baso
         InteraksiBaso basoYangDipindah = CariBasoYangSedangDipindahkan();
         if (basoYangDipindah != null)
@@ -120,7 +105,16 @@ public class Mangkok : MonoBehaviour
             // Panggil fungsi SelesaiPindah di InteraksiBaso
             // Ini akan: set flag false, kembalikan z, dan set parent ke mangkok
             sayurYangDipindah.sayurSelesaiPindah(this.transform);
-            Debug.Log("Bakso berhasil dipindahkan ke posisi baru di mangkok!");
+            Debug.Log("Sayur berhasil dipindahkan ke posisi baru di mangkok!");
+            return;
+        }
+
+        //ayam
+        interaksiayam ayamYangDipindah = CariAyamYangSedangDipindahkan();
+        if (ayamYangDipindah != null)
+        {
+            ayamYangDipindah.ayamSelesaiPindah(this.transform);
+            Debug.Log("Ayam berhasil dipindahkan ke posisi baru di mangkok!");
             return;
         }
 
@@ -136,15 +130,32 @@ public class Mangkok : MonoBehaviour
         }
 
         //ayyyam
-        if (Mangkokterisi == true && Mangkokterisiayam == false && Ayam.dipegang != null && Ayam.dipegang.name.Contains("ayam"))
+        if (Mangkokterisi == true && Ayam.dipegang != null && Ayam.dipegang.name.Contains("ayam"))
         {
-            Destroy(Ayam.dipegang);
+            GameObject Placedayam = Ayam.dipegang;
             Ayam.dipegang = null;
-            
-            Visualayamdimangkok.SetActive(true);
+
+            Placedayam.transform.SetParent(this.transform);
+
+            Vector3 posAyam = Placedayam.transform.localPosition;
+            posAyam.z = -1f;
+            Placedayam.transform.localPosition = posAyam;
+
+            if (Placedayam.GetComponent<interaksiayam>() == null)
+            {
+                Placedayam.AddComponent<interaksiayam>();
+            }
+
+            if (Placedayam.GetComponent<Collider2D>() == null)
+            {
+                Placedayam.AddComponent<PolygonCollider2D>();
+            }
+
+            Placedayam.layer = LayerMask.NameToLayer("Default");
+
             Mangkokterisiayam = true;
             TotalAyam = TotalAyam + 1;
-            Debug.Log("ada ayam nih" + TotalAyam);
+            Debug.Log("ada ayam nih: " + TotalAyam);
         }
 
 
@@ -265,6 +276,21 @@ public class Mangkok : MonoBehaviour
         }
 
         // Tidak ada bakso yang sedang dipindahkan
+        return null;
+    }
+
+    private interaksiayam CariAyamYangSedangDipindahkan()
+    {
+        interaksiayam[] semuaayam = FindObjectsOfType<interaksiayam>();
+
+        foreach (interaksiayam ayam in semuaayam)
+        {
+            if (ayam.ayamsedangDipindahkan)
+            {
+                return ayam;
+            }
+        }
+
         return null;
     }
 }

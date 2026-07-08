@@ -1,53 +1,43 @@
 using UnityEngine;
 
-public class InteraksiBaso : MonoBehaviour
+public class interaksiayam : MonoBehaviour
 {
-    // Flag untuk menandai apakah bakso ini sedang "diangkat" / dipindahkan oleh user
     [HideInInspector]
-    public bool sedangDipindahkan = false;
+    public bool ayamsedangDipindahkan = false;
     private Vector3 posisiAwal;
     private float zAwal;
 
     void Update()
     {
-        // Kalau bakso ini sedang dipindahkan, posisinya ikutin kursor mouse
-        if (sedangDipindahkan)
+        if (ayamsedangDipindahkan)
         {
             Vector3 posisiLayar = Input.mousePosition;
             posisiLayar.z = 10f;
             Vector3 posisiMouse = Camera.main.ScreenToWorldPoint(posisiLayar);
 
-            // Pakai z awal biar bakso tetap di layer yang sama, tidak loncat ke depan/belakang
             posisiMouse.z = zAwal;
-
-            // Pindahkan bakso ke posisi mouse
             transform.position = posisiMouse;
 
             float putaranMouse = Input.mouseScrollDelta.y;
-
             if (putaranMouse != 0)
             {
-                // Putar dirinya sendiri (transform sayur ini) di sumbu Z
                 transform.Rotate(0, 0, putaranMouse * 15f);
             }
 
-            // Kalau user klik kanan saat sedang mindahin bakso → batalkan, kembalikan ke posisi semula
             if (Input.GetMouseButtonDown(1))
             {
-                BatalkanPindah();
+                BatalkanPindahayam();
             }
         }
     }
 
     void OnMouseDown()
     {
-        // biar kaga dabel kata gemini
-        if (sedangDipindahkan)
+        if (ayamsedangDipindahkan)
         {
             return;
         }
 
-        
         bidcontrol[] semuaBak = FindObjectsOfType<bidcontrol>();
         foreach (bidcontrol bak in semuaBak)
         {
@@ -57,18 +47,17 @@ public class InteraksiBaso : MonoBehaviour
             }
         }
 
-        interaksisayur[] semuaSayur = FindObjectsOfType<interaksisayur>();
-        foreach (interaksisayur sayur in semuaSayur)
+        interaksisayur[] semuasayur = FindObjectsOfType<interaksisayur>();
+        foreach (interaksisayur sayur in semuasayur)
         {
             if (sayur.sayursedangDipindahkan)
             {
-                return; // Kalau lagi megang sayur, baso batal diangkat!
+                return;
             }
         }
 
-        //fix bug ngangkat 2 bao
-        InteraksiBaso[] semuaBaso = FindObjectsOfType<InteraksiBaso>();
-        foreach (InteraksiBaso baso in semuaBaso)
+        InteraksiBaso[] semuaBasoTopping = FindObjectsOfType<InteraksiBaso>();
+        foreach (InteraksiBaso baso in semuaBasoTopping)
         {
             if (baso.sedangDipindahkan)
             {
@@ -81,31 +70,27 @@ public class InteraksiBaso : MonoBehaviour
         {
             if (ayam.ayamsedangDipindahkan)
             {
-                return; // Kalau lagi megang ayam, baso batal diangkat!
+                return;
             }
         }
 
         posisiAwal = transform.position;
         zAwal = transform.position.z;
 
-        sedangDipindahkan = true;
+        ayamsedangDipindahkan = true;
 
-        // biar ga bug ama muncul paling atas (bug muncul di z yg ngaco)
         Vector3 posSekarang = transform.position;
         posSekarang.z = -5f;
         transform.position = posSekarang;
 
-        //pas di taro itu jadi default pas di angkat jadi raycast lagi
         gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         transform.SetParent(null);
     }
 
-    public void BatalkanPindah()
+    public void BatalkanPindahayam()
     {
-        sedangDipindahkan = false;
-        //ini pas dia balik di cancel harus ke default lagi biar bisa di klik
+        ayamsedangDipindahkan = false;
         gameObject.layer = LayerMask.NameToLayer("Default");
-       
         transform.position = posisiAwal;
 
         Mangkok mangkok = FindObjectOfType<Mangkok>();
@@ -115,15 +100,10 @@ public class InteraksiBaso : MonoBehaviour
         }
     }
 
-    // Fungsi yang dipanggil oleh mangkok.cs saat user klik mangkok untuk meletakkan bakso
-    // di posisi baru. Posisi sudah di-set di Update() (ikut kursor), jadi tinggal finalisasi.
-    public void SelesaiPindah(Transform parentMangkok)
+    public void ayamSelesaiPindah(Transform parentMangkok)
     {
-        sedangDipindahkan = false;
-
-        // layer balik ke default supaya bakso bisa diklik lagi
+        ayamsedangDipindahkan = false;
         gameObject.layer = LayerMask.NameToLayer("Default");
-
         Vector3 posFinal = transform.position;
         posFinal.z = zAwal;
         transform.position = posFinal;

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class interaksisayur : MonoBehaviour
 {
@@ -72,6 +72,15 @@ public class interaksisayur : MonoBehaviour
             if (baso.sedangDipindahkan)
             {
                 return; // Kalau lagi megang baso, sayur batal diangkat!
+            }
+        }
+
+        interaksiayam[] semuaayam = FindObjectsOfType<interaksiayam>();
+        foreach (interaksiayam ayam in semuaayam)
+        {
+            if (ayam.ayamsedangDipindahkan)
+            {
+                return; // Kalau lagi megang ayam, sayur batal diangkat!
             }
         }
 

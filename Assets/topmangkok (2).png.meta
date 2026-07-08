@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 1e27b45a0389a4d49997911b2d03eac4
+guid: 2f3b5928085bf9f4082057ef8e6c7ccb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1562340643022433542
-    second: Group 193_0
+      213: 5228656471629715265
+    second: topmangkok (2)_0
+  - first:
+      213: 2270322880648123471
+    second: topmangkok (2)_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -97,19 +100,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -139,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Group 193_0
+      name: topmangkok (2)_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 447
-        height: 90
+        x: 448
+        y: 453
+        width: 3604
+        height: 3596
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +144,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: af21e7a7673715ae0800000000000000
-      internalID: -1562340643022433542
+      spriteID: 147590cbb5bef8840800000000000000
+      internalID: 5228656471629715265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: topmangkok (2)_1
+      rect:
+        serializedVersion: 2
+        x: 3749
+        y: 321
+        width: 463
+        height: 358
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f44197a91aec18f10800000000000000
+      internalID: 2270322880648123471
       vertices: []
       indices: 
       edges: []
@@ -174,7 +186,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Group 193_0: -1562340643022433542
+      topmangkok (2)_0: 5228656471629715265
+      topmangkok (2)_1: 2270322880648123471
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

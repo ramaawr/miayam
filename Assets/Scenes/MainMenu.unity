@@ -7823,7 +7823,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80fdf622e0f31dd4287a6ea31b75883a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
-  namaSceneGameplay: newest
+  namaSceneGameplay: terbaru baru
   panelUtama: {fileID: 1151509670}
   panelPengaturan: {fileID: 794955861}
   panelLevel: {fileID: 0}
