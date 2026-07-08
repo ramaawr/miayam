@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Mie ayam 99/AUDIO.meta
 guid: ed4c84f8f5744424ead9a6e829c7fe5d
+========
+guid: eb2c10090b6dad24284e85c5a6f716d7
+>>>>>>>> origin/Rasyid:Assets/Scenes.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

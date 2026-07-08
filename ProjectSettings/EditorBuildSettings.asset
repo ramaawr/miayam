@@ -6,7 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Mie ayam 99/Scenes/SampleScene.unity
+    path: Assets/Scenes/MainMenu.unity
+    guid: 60f4eb66d460e0047938bb73bef53c5b
+  - enabled: 1
+    path: Assets/Scenes/newest.unity
+    guid: cfb6ae1616fbeb4448c7c86ab109b2a7
+  - enabled: 1
+    path: Assets/Scenes/punya rama.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
