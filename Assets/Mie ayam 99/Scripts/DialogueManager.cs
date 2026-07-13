@@ -51,6 +51,11 @@ public class DialogueManager : MonoBehaviour
     [Header("Referensi Suara (SFX)")]
     [Tooltip("AudioSource untuk memutar klip suara dialog (opsional)")]
     public AudioSource audioSource;
+
+    [Header("Referensi Latar (Background)")]
+    [Tooltip("Daftar background yang bisa dipilih melalui index di dalam file Sequence")]
+    // Kumpulan GameObject background yang sudah ada di Scene
+    public GameObject[] daftarBackground;
     #endregion
 
     #region VARIABLES (ALUR INTERNAL)
@@ -95,6 +100,9 @@ public class DialogueManager : MonoBehaviour
         {
             panelPilihanParent.gameObject.SetActive(false);
         }
+
+        // Mematikan semua background agar tidak menutupi game sebelum dipanggil
+        MatikanSemuaBackground();
     }
     #endregion
 
@@ -118,6 +126,25 @@ public class DialogueManager : MonoBehaviour
         // 1. Matikan jalannya waktu game (pause timer masak & pergerakan NPC)
         Time.timeScale = 0f;
 
+        // Atur background yang menyala sesuai indeks yang diminta sequence
+        if (daftarBackground != null && daftarBackground.Length > 0)
+        {
+            for (int i = 0; i < daftarBackground.Length; i++)
+            {
+                if (daftarBackground[i] != null)
+                {
+                    // Hanya nyalakan background yang indeksnya sama dengan indexBackgroundTerpilih
+                    daftarBackground[i].SetActive(i == sequence.indexBackgroundTerpilih);
+                }
+            }
+        }
+
+        // Cek apakah perlu efek fade in layar (menggunakan panel dari LevelManager)
+        if (sequence.gunakanFadeInLayar)
+        {
+            StartCoroutine(ProsesFadeInDialog());
+        }
+
         // 2. Nyalakan panel UI Dialog
         if (panelDialog != null)
         {
@@ -127,6 +154,34 @@ public class DialogueManager : MonoBehaviour
 
         // 3. Tampilkan baris dialog pertama
         TampilkanNode(indexNodeSekarang);
+    }
+
+    // Coroutine khusus untuk memudarkan layar dari gelap ke terang (Fade In)
+    private IEnumerator ProsesFadeInDialog()
+    {
+        // Memastikan LevelManager dan PanelFadeTransisi tersedia (sistem ganti hari)
+        if (LevelManager.instance != null && LevelManager.instance.PanelFadeTransisi != null)
+        {
+            CanvasGroup fader = LevelManager.instance.PanelFadeTransisi;
+            fader.gameObject.SetActive(true);
+            fader.alpha = 1f; // Mulai dari layar gelap (penuh)
+            
+            float durasi = LevelManager.instance.DurasiFade;
+            float waktuBerjalan = 0f;
+
+            // Fading dari alpha 1 turun perlahan ke 0
+            while (waktuBerjalan < durasi)
+            {
+                // Harus menggunakan unscaledDeltaTime karena game sedang di-pause (timeScale = 0)
+                waktuBerjalan += Time.unscaledDeltaTime; 
+                fader.alpha = 1f - (waktuBerjalan / durasi);
+                yield return null; // Tunggu ke frame berikutnya
+            }
+
+            // Pastikan layar benar-benar tembus pandang di akhir
+            fader.alpha = 0f;
+            fader.gameObject.SetActive(false);
+        }
     }
 
     // Fungsi untuk menampilkan baris dialog tertentu berdasarkan indeks
@@ -254,6 +309,9 @@ public class DialogueManager : MonoBehaviour
             panelDialog.SetActive(false);
         }
 
+        // Matikan kembali background agar tidak menutupi layar gameplay
+        MatikanSemuaBackground();
+
         // 2. Kembalikan jalannya waktu game (resume timer masak & NPC)
         Time.timeScale = 1f;
 
@@ -263,6 +321,18 @@ public class DialogueManager : MonoBehaviour
         System.Action tempCallback = callbackSelesaiDialog;
         callbackSelesaiDialog = null;
         tempCallback?.Invoke();
+    }
+
+    // Fungsi utilitas untuk menyembunyikan semua background di daftar
+    private void MatikanSemuaBackground()
+    {
+        if (daftarBackground != null)
+        {
+            foreach (GameObject bg in daftarBackground)
+            {
+                if (bg != null) bg.SetActive(false);
+            }
+        }
     }
     #endregion
 

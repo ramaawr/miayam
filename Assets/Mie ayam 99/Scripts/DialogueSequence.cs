@@ -84,6 +84,15 @@ public class DialogueSequence : ScriptableObject
     // Penanda unik untuk sequence dialog ini
     public string sequenceID;
 
+    [Header("Pengaturan Visual & Latar")]
+    [Tooltip("Jika dicentang, layar akan memudar dari gelap ke terang di awal dialog ini")]
+    // Opsi untuk memicu efek fade in (layar perlahan terang) dari LevelManager
+    public bool gunakanFadeInLayar = false;
+
+    [Tooltip("Indeks background yang ingin ditampilkan (-1 jika tidak ingin merubah background atau biarkan kosong)")]
+    // Memilih background mana yang menyala berdasarkan indeks daftar di DialogueManager
+    public int indexBackgroundTerpilih = -1;
+
     [Header("Daftar Baris Dialog")]
     [Tooltip("Rentetan baris percakapan yang akan dimainkan berurutan")]
     // Menyimpan daftar seluruh baris percakapan dari awal hingga akhir

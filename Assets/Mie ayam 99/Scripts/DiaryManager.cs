@@ -37,14 +37,14 @@ public class DiaryManager : MonoBehaviour
     [Tooltip("Teks isi cerita.")]
     public TextMeshProUGUI TeksIsiCatatan;
     
-    [Tooltip("Wujud 2D/GameObject tombol halaman sebelumnya")]
-    public GameObject TombolSebelumnya;
+    [Tooltip("Tombol halaman sebelumnya (tipe Button UI)")]
+    public Button TombolSebelumnya;
     
-    [Tooltip("Wujud 2D/GameObject tombol halaman berikutnya")]
-    public GameObject TombolBerikutnya;
+    [Tooltip("Tombol halaman berikutnya (tipe Button UI)")]
+    public Button TombolBerikutnya;
     
-    [Tooltip("Wujud 2D/GameObject tombol untuk menutup dan lanjut main")]
-    public GameObject TombolTutup;
+    [Tooltip("Tombol untuk menutup dan lanjut main (tipe Button UI)")]
+    public Button TombolTutup;
     
     // Variabel pengingat (memory) posisi halaman pemain saat ini
     private int halamanSekarang = 0;
@@ -72,38 +72,7 @@ public class DiaryManager : MonoBehaviour
             PanelBukuHarian.SetActive(false);
     }
     
-    void Update()
-    {
-        // Deteksi apabila pemain mengeklik layar (Mouse Kiri / Tap Layar)
-        if (Input.GetMouseButtonDown(0))
-        {
-            // Ubah posisi klik di layar menjadi posisi di dunia game 2D
-            Vector2 posisiMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            
-            // Tembakkan garis lurus (Raycast) ke arah klik untuk melihat benda 2D apa yang kena
-            RaycastHit2D hit = Physics2D.Raycast(posisiMouse, Vector2.zero);
-            
-            // Jika ada objek ber-Collider 2D yang tertembak/diklik
-            if (hit.collider != null)
-            {
-                GameObject objekYangDiklik = hit.collider.gameObject;
-                
-                // Periksa apakah objek itu adalah tombol buku harian kita (dan tombolnya sedang aktif/muncul)
-                if (TombolSebelumnya != null && objekYangDiklik == TombolSebelumnya && TombolSebelumnya.activeSelf)
-                {
-                    HalamanSebelumnya();
-                }
-                else if (TombolBerikutnya != null && objekYangDiklik == TombolBerikutnya && TombolBerikutnya.activeSelf)
-                {
-                    HalamanBerikutnya();
-                }
-                else if (TombolTutup != null && objekYangDiklik == TombolTutup && TombolTutup.activeSelf)
-                {
-                    TutupBukuHarian();
-                }
-            }
-        }
-    }
+
     
     // Fungsi ini dipanggil khusus oleh LevelManager setelah pemain menekan tombol Lanjut di Popup Result
     public void TampilkanBukuHarian(int levelYangBaruSelesai)
@@ -146,14 +115,14 @@ public class DiaryManager : MonoBehaviour
         // Tombol hanya dimunculkan kalau pemain tidak berada di halaman paling pertama (index 0)
         if (TombolSebelumnya != null)
         {
-            TombolSebelumnya.SetActive(halamanSekarang > 0);
+            TombolSebelumnya.gameObject.SetActive(halamanSekarang > 0);
         }
         
         // ATURAN TOMBOL BERIKUTNYA:
         // Tombol hanya dimunculkan kalau pemain belum mencapai 'batasHalamanMaksimal'
         if (TombolBerikutnya != null)
         {
-            TombolBerikutnya.SetActive(halamanSekarang < batasHalamanMaksimal && halamanSekarang < DaftarBukuHarian.Length - 1);
+            TombolBerikutnya.gameObject.SetActive(halamanSekarang < batasHalamanMaksimal && halamanSekarang < DaftarBukuHarian.Length - 1);
         }
     }
     

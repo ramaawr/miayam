@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbfc6cd9f2e58bb4e859cef8b43f1e31, type: 3}
+  m_Name: Pend - Eko
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequence
+  sequenceID: 1
+  dialogueNodes:
+  - speakerName: eko
+    dialogueText: anjay jadi coy otw jual
+    portraitSprite: {fileID: -5617772308520878989, guid: 62f2aea9592d70948babf8a186b765e8, type: 3}
+    portraitSide: 1
+    typingSpeed: 0
+    audioClip: {fileID: 0}
+    jumpToNodeIndex: -1
+    choices: []

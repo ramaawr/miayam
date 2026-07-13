@@ -43,6 +43,10 @@ public class MoralityManager : MonoBehaviour
     [Tooltip("Waktu animasi pengisian bar (detik)")]
     public float DurasiAnimasiBar = 1f;
 
+    [Header("Referensi Latar (Background)")]
+    [Tooltip("Daftar background yang bisa dipilih melalui index di dalam file Sequence")]
+    public GameObject[] daftarBackground;
+
     // Menyimpan aksi (callback) yang akan dijalankan setelah seluruh fase moralitas selesai
     private Action onSelesaiCallback;
     
@@ -82,8 +86,11 @@ public class MoralityManager : MonoBehaviour
         // Memuat poin moralitas dari penyimpanan saat game dimulai untuk update bar awal
         MuatPoinMoralitas();
         PerbaruiUIBar(false); // Perbarui tanpa animasi di awal
-    }
 
+        // Mematikan semua background agar tidak muncul sejak awal game
+        MatikanSemuaBackground();
+    }
+    
     #region SAVE / LOAD SYSTEM (PLAYER PREFS)
     
     // Fungsi ini dipanggil untuk membaca nilai poin moralitas terakhir yang disimpan
@@ -146,12 +153,57 @@ public class MoralityManager : MonoBehaviour
         onSelesaiCallback = callbackSetelahSelesai;
         indeksNodeSaatIni = 0;
 
+        // Atur background yang menyala sesuai indeks yang diminta sequence
+        if (daftarBackground != null && daftarBackground.Length > 0)
+        {
+            for (int i = 0; i < daftarBackground.Length; i++)
+            {
+                if (daftarBackground[i] != null)
+                {
+                    daftarBackground[i].SetActive(i == sequence.indexBackgroundTerpilih);
+                }
+            }
+        }
+
+        // Cek apakah perlu efek fade in layar
+        if (sequence.gunakanFadeInLayar)
+        {
+            StartCoroutine(ProsesFadeInDialogMoralitas());
+        }
+
         if (PanelDialogMoralitas != null)
         {
             PanelDialogMoralitas.SetActive(true);
         }
 
         TampilkanNodeSekarang();
+    }
+
+    // Coroutine khusus untuk memudarkan layar dari gelap ke terang (Fade In)
+    private IEnumerator ProsesFadeInDialogMoralitas()
+    {
+        // Memastikan LevelManager dan PanelFadeTransisi tersedia
+        if (LevelManager.instance != null && LevelManager.instance.PanelFadeTransisi != null)
+        {
+            CanvasGroup fader = LevelManager.instance.PanelFadeTransisi;
+            fader.gameObject.SetActive(true);
+            fader.alpha = 1f; // Mulai dari layar gelap (penuh)
+            
+            float durasi = LevelManager.instance.DurasiFade;
+            float waktuBerjalan = 0f;
+
+            // Fading dari alpha 1 turun perlahan ke 0
+            while (waktuBerjalan < durasi)
+            {
+                // Harus menggunakan unscaledDeltaTime karena bisa jadi game sedang di-pause
+                waktuBerjalan += Time.unscaledDeltaTime; 
+                fader.alpha = 1f - (waktuBerjalan / durasi);
+                yield return null; 
+            }
+
+            fader.alpha = 0f;
+            fader.gameObject.SetActive(false);
+        }
     }
 
     private void TampilkanNodeSekarang()
@@ -315,6 +367,9 @@ public class MoralityManager : MonoBehaviour
             PanelDialogMoralitas.SetActive(false);
         }
 
+        // Matikan kembali background agar tidak menutupi gameplay
+        MatikanSemuaBackground();
+
         // Memanggil callback agar LevelManager bisa memunculkan Popup Result setelah dialog selesai
         if (onSelesaiCallback != null)
         {
@@ -330,6 +385,18 @@ public class MoralityManager : MonoBehaviour
         
         onSelesaiCallback.Invoke();
         onSelesaiCallback = null;
+    }
+
+    // Fungsi utilitas untuk menyembunyikan semua background di daftar
+    private void MatikanSemuaBackground()
+    {
+        if (daftarBackground != null)
+        {
+            foreach (GameObject bg in daftarBackground)
+            {
+                if (bg != null) bg.SetActive(false);
+            }
+        }
     }
     #endregion
 

@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6da237020636e6e4ea77efeeb798a109, type: 3}
-  m_Name: Lv 1
+  m_Name: Prolog tutorial
   m_EditorClassIdentifier: Assembly-CSharp::DataLevel
   NomorLevel: 1
-  AdalahProlog: 0
-  AntreanNPC:
-  - {fileID: 11400000, guid: b368d479b88ed124f89e60be23ec1e25, type: 2}
-  DialogAwalLevel: {fileID: 0}
-  DialogAkhirLevel: {fileID: 11400000, guid: b6df905b9c3f237439a57b7f0eb01be2, type: 2}
-  DialogMoralitasAkhirLevel: {fileID: 11400000, guid: 500d7a326f3859441b0624f0604cb38e, type: 2}
+  AdalahProlog: 1
+  AntreanNPC: []
+  DialogAwalLevel: {fileID: 11400000, guid: 4df51d429423e1e4e851619269b2869a, type: 2}
+  DialogAkhirLevel: {fileID: 11400000, guid: 8d5afb3d4bbdfef4fb97336a4fc81d77, type: 2}
+  DialogMoralitasAkhirLevel: {fileID: 0}

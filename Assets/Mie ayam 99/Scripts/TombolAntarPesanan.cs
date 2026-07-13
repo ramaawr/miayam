@@ -58,6 +58,13 @@ public class TombolAntarPesanan : MonoBehaviour
     // =========================================================================
     public void AntarPesanan()
     {
+        // Cek apakah ini level prolog (tutorial)
+        bool isProlog = false;
+        if (LevelManager.instance != null)
+        {
+            isProlog = LevelManager.instance.ApakahLevelProlog();
+        }
+
         // ----- GUARD: Pastikan GameManager ada -----
         if (GameManager.instance == null)
         {
@@ -65,28 +72,30 @@ public class TombolAntarPesanan : MonoBehaviour
             return;
         }
 
-        // ----- GUARD: Cek apakah ada pesanan aktif yang perlu diantar -----
-        // Kalau tidak ada NPC yang pesan, tombol tidak ngapa-ngapain
-        if (GameManager.instance.DaftarNPCAktif.Count == 0)
+        // Jika BUKAN prolog, lakukan validasi pelanggan dan tangan (Normal Flow)
+        if (!isProlog)
         {
-            Debug.Log("Belum ada pesanan yang perlu diantar.");
-            if (popupKonfirmasi != null)
+            // ----- GUARD: Cek apakah ada pesanan aktif yang perlu diantar -----
+            if (GameManager.instance.DaftarNPCAktif.Count == 0)
             {
-                popupKonfirmasi.TampilkanPeringatan("Belum ada pelanggan yang datang memesan! Silakan tunggu pelanggan terlebih dahulu.");
+                Debug.Log("Belum ada pesanan yang perlu diantar.");
+                if (popupKonfirmasi != null)
+                {
+                    popupKonfirmasi.TampilkanPeringatan("Belum ada pelanggan yang datang memesan! Silakan tunggu pelanggan terlebih dahulu.");
+                }
+                return;
             }
-            return;
-        }
 
-        // ----- GUARD: Cek apakah pemain sudah membawa makanan -----
-        // Kalau sudah bawa (belum diserahkan ke NPC), jangan bisa antar lagi
-        if (GameManager.instance.BawaMakanan == true)
-        {
-            Debug.Log("Kamu sudah membawa makanan! Serahkan dulu ke NPC.");
-            if (popupKonfirmasi != null)
+            // ----- GUARD: Cek apakah pemain sudah membawa makanan -----
+            if (GameManager.instance.BawaMakanan == true)
             {
-                popupKonfirmasi.TampilkanPeringatan("Kamu sudah membawa makanan di tangan! Serahkan dulu pesanan ini ke pelanggan di gerobak depan.");
+                Debug.Log("Kamu sudah membawa makanan! Serahkan dulu ke NPC.");
+                if (popupKonfirmasi != null)
+                {
+                    popupKonfirmasi.TampilkanPeringatan("Kamu sudah membawa makanan di tangan! Serahkan dulu pesanan ini ke pelanggan di gerobak depan.");
+                }
+                return;
             }
-            return;
         }
 
         // ----- GUARD: Cek apakah referensi mangkok sudah ada -----
@@ -110,8 +119,16 @@ public class TombolAntarPesanan : MonoBehaviour
             return;
         }
 
+        // Jika ini adalah level prolog, lewati tahap popup konfirmasi agar lebih cepat (1-click)
+        if (isProlog)
+        {
+            Debug.Log("Mengantar pesanan Prolog (langsung selesai tanpa konfirmasi).");
+            KonfirmasiAntarPesanan();
+            return; // hentikan eksekusi kode di bawah agar tidak memunculkan popup
+        }
+
         // =====================================================================
-        // TAMPILKAN POPUP KONFIRMASI
+        // TAMPILKAN POPUP KONFIRMASI (Hanya untuk Level Normal)
         // Jika referensi popupKonfirmasi di-assign, kita munculkan popup.
         // Jika tidak di-assign (fallback), langsung kirim pesanan seperti biasa.
         // =====================================================================
@@ -140,6 +157,29 @@ public class TombolAntarPesanan : MonoBehaviour
     // =========================================================================
     public void KonfirmasiAntarPesanan()
     {
+        bool isProlog = false;
+        if (LevelManager.instance != null)
+        {
+            isProlog = LevelManager.instance.ApakahLevelProlog();
+        }
+
+        // Jika ini adalah level prolog, sistemnya sangat sederhana:
+        // Hapus mangkok, lalu suruh LevelManager langsung menamatkan level.
+        if (isProlog)
+        {
+            KosongkanMangkok();
+            Debug.Log("Masakan Tutorial (Prolog) selesai!");
+            
+            // Perintahkan LevelManager menyelesaikan fase prolog (memainkan dialog akhir dan memanggil Diary)
+            if (LevelManager.instance != null)
+            {
+                LevelManager.instance.SelesaikanPrologManual();
+            }
+            return; // Hentikan fungsi di sini agar tidak menjalankan logika kamera dan bawa makanan
+        }
+
+        // =====================================================================
+        // JIKA BUKAN PROLOG: ALUR NORMAL
         // =====================================================================
         // LANGKAH 1: Baca isi mangkok dapur
         // Ambil semua counter dari script Mangkok yang sudah ada
