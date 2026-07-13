@@ -8,6 +8,10 @@ public class DataLevel : ScriptableObject
     [Tooltip("Nomor level untuk ditampilkan di UI (misal: 1, 2, 3)")]
     // Menyimpan nomor level ini agar bisa ditampilkan pada antarmuka (UI) permainan
     public int NomorLevel = 1;
+
+    [Tooltip("Centang jika level ini adalah level Prolog (Tutorial). Level prolog akan melewati popup rekap/result.")]
+    // Menandakan apakah level ini merupakan Prolog yang tidak memiliki rekap harian
+    public bool AdalahProlog = false;
     #endregion
 
     #region DATA ANTREAN NPC

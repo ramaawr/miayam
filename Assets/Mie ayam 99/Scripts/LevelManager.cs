@@ -23,6 +23,13 @@ public class LevelManager : MonoBehaviour
     [Tooltip("Indeks NPC ke-berapa yang sedang dilayani di level ini")]
     // Mengingat antrean nomor berapa yang sedang dilayani pemain pada level tersebut
     private int indexAntreanNPC = 0;
+    
+    [Header("Pengaturan Latar Belakang")]
+    [Tooltip("Masukkan GameObject background warung jualan normal ke sini.")]
+    public GameObject BackgroundNormal;
+
+    [Tooltip("Masukkan GameObject background khusus tutorial/dapur ke sini.")]
+    public GameObject BackgroundProlog;
     #endregion
 
     #region PENGATURAN NPC & JEDA
@@ -50,6 +57,10 @@ public class LevelManager : MonoBehaviour
     [Tooltip("Teks judul di popup (misal: Hari ke-1 Selesai!)")]
     // Mengubah judul pada panel rekap agar sesuai dengan nomor level yang baru diselesaikan
     public TextMeshProUGUI TeksJudulResult;
+
+    [Tooltip("Teks untuk rincian struk (opsional, ditarik dari Inspector)")]
+    // Menampilkan daftar jualan dan potongan bahan/pungli secara detail
+    public TextMeshProUGUI TeksRincianReceipt;
     
     [Tooltip("Teks untuk menampilkan pendapatan di level ini")]
     // Menampilkan jumlah uang yang HANYA didapatkan pada level/hari tersebut
@@ -121,6 +132,42 @@ public class LevelManager : MonoBehaviour
                 TeksLevelCounter.text = "" + levelAktif.NomorLevel;
             }
 
+            // Mengatur Latar Belakang (Background) berdasarkan tipe level (Prolog atau Normal)
+            // Mematikan keduanya terlebih dahulu agar layar bersih
+            if (BackgroundNormal != null) BackgroundNormal.SetActive(false);
+            if (BackgroundProlog != null) BackgroundProlog.SetActive(false);
+
+            // Cukup periksa apakah level ini dicentang sebagai "Adalah Prolog" di DataLevel
+            if (levelAktif.AdalahProlog)
+            {
+                // Jika ini adalah prolog, aktifkan gambar latar belakang khusus prolog (dapur)
+                if (BackgroundProlog != null) BackgroundProlog.SetActive(true);
+            }
+            else
+            {
+                // Jika level normal, aktifkan gambar latar belakang warung utama
+                if (BackgroundNormal != null) BackgroundNormal.SetActive(true);
+            }
+
+            // --- PENGATURAN KAMERA OTOMATIS ---
+            // Memindahkan kamera ke dapur (jika prolog) atau ke depan (jika normal)
+            NavigasiKamera navigasi = FindObjectOfType<NavigasiKamera>();
+            if (navigasi != null)
+            {
+                if (levelAktif.AdalahProlog)
+                {
+                    // Langsung set posisi instan agar tidak melihat warung depan saat loading
+                    navigasi.transform.position = navigasi.PosisiDapur;
+                    navigasi.PindahKeDapur(); // Set status internalnya juga
+                }
+                else
+                {
+                    // Pastikan kamera kembali ke depan untuk level normal
+                    navigasi.transform.position = navigasi.PosisiDepan;
+                    navigasi.PindahKeDepan();
+                }
+            }
+
             // Memastikan antrean selalu dimulai dari orang pertama (indeks 0) setiap ganti level
             indexAntreanNPC = 0;
 
@@ -128,12 +175,31 @@ public class LevelManager : MonoBehaviour
             if (DialogueManager.instance != null && levelAktif.DialogAwalLevel != null)
             {
                 // Memulai dialog awal level sebelum NPC pertama di-spawn
-                DialogueManager.instance.MulaiDialog(levelAktif.DialogAwalLevel, MulaiAntreanNPC);
+                DialogueManager.instance.MulaiDialog(levelAktif.DialogAwalLevel, () => {
+                    // BUG FIX: Hanya mulai antrean NPC jika ini BUKAN level prolog
+                    if (!levelAktif.AdalahProlog) 
+                    {
+                        MulaiAntreanNPC();
+                    }
+                    else
+                    {
+                        // Jika level prolog, otomatis buka buku tutorial setelah dialog awal selesai
+                        if (TutorialManager.instance != null) TutorialManager.instance.BukaTutorial();
+                    }
+                });
             }
             else
             {
-                // Jika tidak ada dialog, langsung memulai antrean NPC secara langsung
-                MulaiAntreanNPC();
+                // Jika tidak ada dialog, langsung memulai antrean NPC (KECUALI level prolog)
+                if (!levelAktif.AdalahProlog) 
+                {
+                    MulaiAntreanNPC();
+                }
+                else
+                {
+                    // Jika level prolog, otomatis buka buku tutorial langsung
+                    if (TutorialManager.instance != null) TutorialManager.instance.BukaTutorial();
+                }
             }
         }
         else
@@ -217,21 +283,75 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    // Fungsi tambahan untuk mengecek apakah level saat ini adalah level prolog
+    public bool ApakahLevelProlog()
+    {
+        if (DaftarLevel.Count == 0 || indexLevelSekarang >= DaftarLevel.Count) return false;
+        return DaftarLevel[indexLevelSekarang].AdalahProlog;
+    }
+
+    // Fungsi untuk mengakhiri level prolog secara paksa/manual (dipanggil dari dapur)
+    public void SelesaikanPrologManual()
+    {
+        if (DaftarLevel.Count > 0 && indexLevelSekarang < DaftarLevel.Count)
+        {
+            DataLevel levelAktif = DaftarLevel[indexLevelSekarang];
+            
+            Debug.Log("Tutorial/Prolog diselesaikan secara manual oleh pemain!");
+            
+            // Sama seperti alur normal, kita cek apakah ada dialog penutup
+            if (DialogueManager.instance != null && levelAktif.DialogAkhirLevel != null)
+            {
+                DialogueManager.instance.MulaiDialog(levelAktif.DialogAkhirLevel, () => {
+                    LanjutKeFaseAkhir(levelAktif);
+                });
+            }
+            else
+            {
+                LanjutKeFaseAkhir(levelAktif);
+            }
+        }
+    }
+
     // Fungsi tambahan untuk memisahkan logika pemanggilan dialog moralitas
-    // Bertindak sebagai jembatan antara selesainya dialog biasa dan munculnya Popup Result
+    // Bertindak sebagai jembatan antara selesainya dialog biasa dan munculnya Popup Result atau Diary
     private void LanjutKeFaseAkhir(DataLevel levelAktif)
     {
         // Memeriksa apakah ada dialog moralitas yang diatur untuk level ini
         if (MoralityManager.instance != null && levelAktif.DialogMoralitasAkhirLevel != null)
         {
-            // Memanggil sistem moralitas, dan memerintahkan memanggil Popup Result setelahnya
+            // Memanggil sistem moralitas, dan memerintahkan memproses akhir level setelahnya
             MoralityManager.instance.MulaiDialogMoralitas(levelAktif.DialogMoralitasAkhirLevel, () => {
-                TampilkanPopupResult(levelAktif.NomorLevel);
+                ProsesPenyelesaianLevel(levelAktif);
             });
         }
         else
         {
-            // Jika tidak ada data dialog moralitas, langsung rekap pendapatan harian
+            // Jika tidak ada data dialog moralitas, langsung proses penyelesaian level
+            ProsesPenyelesaianLevel(levelAktif);
+        }
+    }
+
+    // Menentukan apakah level akan menampilkan panel rekap uang atau langsung ke buku harian
+    private void ProsesPenyelesaianLevel(DataLevel levelAktif)
+    {
+        if (levelAktif.AdalahProlog)
+        {
+            // Jika ini level prolog (tutorial), LEWATI panel result/rekap uang
+            // Langsung panggil Buku Harian
+            if (DiaryManager.instance != null)
+            {
+                DiaryManager.instance.TampilkanBukuHarian(indexLevelSekarang);
+            }
+            else
+            {
+                // Jika buku harian tidak ada, langsung lanjut ke level 1
+                LanjutKeLevelBerikutnya();
+            }
+        }
+        else
+        {
+            // Jika bukan prolog, tampilkan popup rekap hasil jualan normal
             TampilkanPopupResult(levelAktif.NomorLevel);
         }
     }
@@ -248,11 +368,20 @@ public class LevelManager : MonoBehaviour
 
             // Menyesuaikan teks judul popup dengan nomor hari yang baru selesai
             if (TeksJudulResult != null)
-                TeksJudulResult.text = "Hari ke-" + nomorLevel + " Selesai!";
+                TeksJudulResult.text = "Today's Sales";
 
             // Mengambil angka-angka keuangan dari kasir (EconomyManager)
             if (EconomyManager.instance != null)
             {
+                // Eksekusi potong bahan & pungli terlebih dahulu sebelum memunculkan popup
+                EconomyManager.instance.ProsesPotonganAkhirHari();
+
+                // Isi rincian struk ke dalam panel jika slot teksnya sudah dimasukkan dari Inspector
+                if (TeksRincianReceipt != null)
+                {
+                    TeksRincianReceipt.text = EconomyManager.instance.DapatkanTeksStruk();
+                }
+
                 if (TeksPendapatanResult != null)
                     TeksPendapatanResult.text = "Rp " + EconomyManager.instance.PendapatanHariIni;
                 
@@ -319,7 +448,7 @@ public class LevelManager : MonoBehaviour
                 float fraksiFade = waktuBerjalan / DurasiFade;
                 PanelFadeTransisi.alpha = fraksiFade;
                 
-                waktuBerjalan += Time.deltaTime;
+                waktuBerjalan += Time.unscaledDeltaTime;
                 yield return null; // Tunggu satu frame
             }
             
@@ -342,7 +471,7 @@ public class LevelManager : MonoBehaviour
                 float fraksiFade = waktuBerjalan / DurasiFade;
                 PanelFadeTransisi.alpha = 1f - fraksiFade;
                 
-                waktuBerjalan += Time.deltaTime;
+                waktuBerjalan += Time.unscaledDeltaTime;
                 yield return null;
             }
             
