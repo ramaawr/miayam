@@ -72,7 +72,7 @@ public class TombolAntarPesanan : MonoBehaviour
             Debug.Log("Belum ada pesanan yang perlu diantar.");
             if (popupKonfirmasi != null)
             {
-                popupKonfirmasi.TampilkanPeringatan("Belum ada pelanggan yang datang memesan! Silakan tunggu pelanggan terlebih dahulu.");
+                popupKonfirmasi.TampilkanPeringatan("No customers have ordered yet! Please wait for a customer first.");
             }
             return;
         }
@@ -84,7 +84,7 @@ public class TombolAntarPesanan : MonoBehaviour
             Debug.Log("Kamu sudah membawa makanan! Serahkan dulu ke NPC.");
             if (popupKonfirmasi != null)
             {
-                popupKonfirmasi.TampilkanPeringatan("Kamu sudah membawa makanan di tangan! Serahkan dulu pesanan ini ke pelanggan di gerobak depan.");
+                popupKonfirmasi.TampilkanPeringatan("You are already carrying food! Hand this order to the customer at the cart first.");
             }
             return;
         }
@@ -105,7 +105,7 @@ public class TombolAntarPesanan : MonoBehaviour
             Debug.Log("Mangkok masih kosong! Tidak bisa diantar.");
             if (popupKonfirmasi != null)
             {
-                popupKonfirmasi.TampilkanPeringatan("Mangkok Anda masih kosong! Masukkan mie terlebih dahulu sebelum mengantar pesanan.");
+                popupKonfirmasi.TampilkanPeringatan("Your bowl is still empty! Put noodles in first before serving the order.");
             }
             return;
         }
@@ -118,11 +118,11 @@ public class TombolAntarPesanan : MonoBehaviour
         if (popupKonfirmasi != null)
         {
             // Buat string rincian isi mangkok secara manual agar ramah pemula dan rapi
-            string detailMasakan = "Isi Mangkok Saat Ini:\n" +
-                                   "• Mie : " + (mangkokDapur.AdaMie ? "include" : "none") + "\n" +
-                                   "• Ayam : " + mangkokDapur.TotalAyam + "\n" +
-                                   "• Bakso : " + mangkokDapur.Totalbaso + "\n" +
-                                   "• Sayur : " + mangkokDapur.TotalSayur + "";
+            string detailMasakan = "Current Bowl Contents:\n" +
+                                   "• Noodle: " + (mangkokDapur.AdaMie ? "included" : "none") + "\n" +
+                                   "• Chicken: " + mangkokDapur.TotalAyam + "\n" +
+                                   "• Meatball: " + mangkokDapur.Totalbaso + "\n" +
+                                   "• Veggies: " + mangkokDapur.TotalSayur + "";
 
 
             popupKonfirmasi.Tampilkan(this, detailMasakan);

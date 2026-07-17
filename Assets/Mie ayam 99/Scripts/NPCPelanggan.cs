@@ -305,7 +305,7 @@ public class NPCPelanggan : MonoBehaviour
             // Tampilkan feedback positif di bubble chat
             if (bubbleChat != null)
             {
-                bubbleChat.TampilkanFeedback("Terima kasih! Pesanan benar!");
+                bubbleChat.TampilkanFeedback("Thank you! The order is correct!");
             }
         }
         else
@@ -317,7 +317,7 @@ public class NPCPelanggan : MonoBehaviour
             // Tampilkan feedback di bubble chat
             if (bubbleChat != null)
             {
-                bubbleChat.TampilkanFeedback("Hmm, ini bukan pesananku... tapi ya sudah.");
+                bubbleChat.TampilkanFeedback("Hmm, this is not my order... but okay.");
             }
 
             // Catat kesalahan ke memori ProfilNPC (Untuk fitur masa depan)

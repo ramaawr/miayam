@@ -103,19 +103,19 @@ public class SettingsManager : MonoBehaviour
 
     private void InisialisasiDropdownStatis()
     {
-        // Inisialisasi Dropdown Mode Tampilan
+        // Inisialisasi Dropdown Mode Tampilan (Display Mode Options)
         if (dropdownDisplayMode != null)
         {
             dropdownDisplayMode.ClearOptions();
-            List<string> opsiDisplay = new List<string> { "Layar Penuh (Fullscreen)", "Mode Jendela (Windowed)" };
+            List<string> opsiDisplay = new List<string> { "Fullscreen", "Windowed" };
             dropdownDisplayMode.AddOptions(opsiDisplay);
         }
 
-        // Inisialisasi Dropdown FPS
+        // Inisialisasi Dropdown FPS (FPS Limit Options)
         if (dropdownFPS != null)
         {
             dropdownFPS.ClearOptions();
-            List<string> opsiFPSLabel = new List<string> { "30 FPS (Hemat Baterai)", "60 FPS (Standar)", "120 FPS (Sangat Mulus)", "Tanpa Batas (Unlimited)" };
+            List<string> opsiFPSLabel = new List<string> { "30 FPS (Battery Saver)", "60 FPS (Standard)", "120 FPS (Smooth)", "Unlimited" };
             dropdownFPS.AddOptions(opsiFPSLabel);
         }
     }
@@ -211,7 +211,7 @@ public class SettingsManager : MonoBehaviour
             Screen.SetResolution(res.width, res.height, isFullscreen);
         }
 
-        Debug.Log("SettingsManager: Mode Tampilan diatur ke " + (isFullscreen ? "Layar Penuh" : "Mode Jendela"));
+        Debug.Log("SettingsManager: Display Mode set to " + (isFullscreen ? "Fullscreen" : "Windowed"));
     }
 
     public void SetFPSLimit(int indeksFPS)
@@ -224,8 +224,8 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.SetInt(KEY_FPS_LIMIT, indeksFPS);
         PlayerPrefs.Save();
 
-        string fpsText = limitTarget == -1 ? "Tanpa Batas" : limitTarget + " FPS";
-        Debug.Log("SettingsManager: Batasan FPS diatur ke " + fpsText);
+        string fpsText = limitTarget == -1 ? "Unlimited" : limitTarget + " FPS";
+        Debug.Log("SettingsManager: FPS Limit set to " + fpsText);
     }
 
     public void SetResolusi(int indeksResolusi)

@@ -88,10 +88,10 @@ public class BubbleChat : MonoBehaviour
         }
 
         // Isi teks masing-masing bahan
-        // Format: "Mie: 1", "Baso: 2", dst
+        // Format: "Noodle: 1", "Meatball: 2", dst
         if (TeksMie != null)
         {
-            TeksMie.text = "Mie: " + pesanan.JumlahMie;
+            TeksMie.text = "Noodle: " + pesanan.JumlahMie;
 
             // Kalau jumlahnya 0, samarkan teksnya (abu-abu)
             // Kalau ada isinya, pakai warna biru aksen (#4A90D9)
@@ -102,7 +102,7 @@ public class BubbleChat : MonoBehaviour
 
         if (TeksBaso != null)
         {
-            TeksBaso.text = "Baso: " + pesanan.JumlahBaso;
+            TeksBaso.text = "Meatball: " + pesanan.JumlahBaso;
             TeksBaso.color = pesanan.JumlahBaso > 0
                 ? new Color(0.29f, 0.56f, 0.85f)
                 : new Color(0.7f, 0.7f, 0.7f);
@@ -110,7 +110,7 @@ public class BubbleChat : MonoBehaviour
 
         if (TeksAyam != null)
         {
-            TeksAyam.text = "Ayam: " + pesanan.JumlahAyam;
+            TeksAyam.text = "Chicken: " + pesanan.JumlahAyam;
             TeksAyam.color = pesanan.JumlahAyam > 0
                 ? new Color(0.29f, 0.56f, 0.85f)
                 : new Color(0.7f, 0.7f, 0.7f);
@@ -118,7 +118,7 @@ public class BubbleChat : MonoBehaviour
 
         if (TeksSayur != null)
         {
-            TeksSayur.text = "Sayur: " + pesanan.JumlahSayur;
+            TeksSayur.text = "Veggies: " + pesanan.JumlahSayur;
             TeksSayur.color = pesanan.JumlahSayur > 0
                 ? new Color(0.29f, 0.56f, 0.85f)
                 : new Color(0.7f, 0.7f, 0.7f);

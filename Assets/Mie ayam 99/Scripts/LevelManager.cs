@@ -116,7 +116,7 @@ public class LevelManager : MonoBehaviour
         {
             // Jika sudah tidak ada level lagi, berarti game tamat
             Debug.Log("==== SEMUA LEVEL TELAH SELESAI! TELAATTT ====");
-            if (TeksLevelCounter != null) TeksLevelCounter.text = "TAMAT!";
+            if (TeksLevelCounter != null) TeksLevelCounter.text = "THE END!";
         }
     }
 
@@ -177,7 +177,7 @@ public class LevelManager : MonoBehaviour
 
             // Menyesuaikan teks judul popup dengan nomor hari yang baru selesai
             if (TeksJudulResult != null)
-                TeksJudulResult.text = "Hari ke-" + nomorLevel + " Selesai!";
+                TeksJudulResult.text = "Day " + nomorLevel + " Completed!";
 
             // Mengambil angka-angka keuangan dari kasir (EconomyManager)
             if (EconomyManager.instance != null)
