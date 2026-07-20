@@ -35,6 +35,16 @@ public class MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [Tooltip("Skala ukuran tombol saat ditekan/diklik (mengecil sedikit)")]
     public Vector3 skalaTekan = new Vector3(0.95f, 0.95f, 0.95f);
 
+    [Header("Pengaturan Warna Background")]
+    [Tooltip("Warna background saat keadaan normal (hitam transparan tipis)")]
+    public Color warnaBgNormal = new Color(0.0f, 0.0f, 0.0f, 0.3f);
+
+    [Tooltip("Warna background saat disorot mouse (lebih gelap)")]
+    public Color warnaBgHover = new Color(0.0f, 0.0f, 0.0f, 0.6f);
+
+    [Tooltip("Warna background saat ditekan/diklik (sangat gelap)")]
+    public Color warnaBgTekan = new Color(0.0f, 0.0f, 0.0f, 0.85f);
+
     [Header("Pengaturan Efek Transisi")]
     [Tooltip("Kecepatan transisi perubahan warna dan skala (semakin besar semakin cepat)")]
     public float kecepatanTransisi = 10f;
@@ -67,6 +77,8 @@ public class MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private float targetHighlightAlpha;
 
     private CanvasGroup highlightCanvasGroup;
+    private UnityEngine.UI.Image highlightImage;
+    private Color targetBgWarna;
 
     private void Start()
     {
@@ -84,6 +96,8 @@ public class MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         // Inisialisasi bar highlight jika ada
         if (barHighlight != null)
         {
+            highlightImage = barHighlight.GetComponent<UnityEngine.UI.Image>();
+
             // Ambil atau tambahkan CanvasGroup untuk memudarkan (fade) highlight
             highlightCanvasGroup = barHighlight.GetComponent<CanvasGroup>();
             if (highlightCanvasGroup == null)
@@ -95,12 +109,19 @@ public class MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             posisiHighlightNormal = barHighlight.localPosition;
             posisiHighlightGeser = posisiHighlightNormal + new Vector3(jarakGeserHighlight, 0, 0);
 
-            // Sembunyikan highlight di awal
-            highlightCanvasGroup.alpha = 0f;
-            targetHighlightAlpha = 0f;
+            // Sembunyikan highlight di awal (Sekrung selalu tampil penuh)
+            highlightCanvasGroup.alpha = 1f;
+            targetHighlightAlpha = 1f;
             if (gunakanEfekGeser)
             {
                 barHighlight.localPosition = posisiHighlightGeser;
+            }
+
+            // Set warna awal background
+            targetBgWarna = warnaBgNormal;
+            if (highlightImage != null)
+            {
+                highlightImage.color = warnaBgNormal;
             }
         }
     }
@@ -116,11 +137,17 @@ public class MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             teksTombol.color = Color.Lerp(teksTombol.color, targetWarna, Time.deltaTime * kecepatanTransisi);
         }
 
-        // Transisi transparansi (fade) dan posisi (slide) highlight secara halus
+        // Transisi warna dan posisi highlight secara halus
         if (barHighlight != null && highlightCanvasGroup != null)
         {
-            // Fade-in / Fade-out alpha
-            highlightCanvasGroup.alpha = Mathf.MoveTowards(highlightCanvasGroup.alpha, targetHighlightAlpha, Time.deltaTime * (kecepatanTransisi / 2f));
+            // CanvasGroup alpha selalu 1 karena kita ingin background selalu terlihat
+            highlightCanvasGroup.alpha = 1f;
+
+            // Transisi warna background secara halus
+            if (highlightImage != null)
+            {
+                highlightImage.color = Color.Lerp(highlightImage.color, targetBgWarna, Time.deltaTime * kecepatanTransisi);
+            }
 
             // Efek geser (slide-in)
             if (gunakanEfekGeser)
@@ -141,7 +168,7 @@ public class MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         isHovered = true;
         targetWarna = warnaHover;
         targetSkala = skalaHover;
-        targetHighlightAlpha = 1f; // Tampilkan highlight
+        targetBgWarna = warnaBgHover;
 
         // Putar suara hover jika ada
         if (audioSource != null && suaraHover != null)
@@ -157,7 +184,7 @@ public class MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         isPressed = false;
         targetWarna = warnaNormal;
         targetSkala = skalaNormal;
-        targetHighlightAlpha = 0f; // Sembunyikan highlight
+        targetBgWarna = warnaBgNormal;
     }
 
     // Saat tombol diklik / ditekan (Click Down)
@@ -165,6 +192,7 @@ public class MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         isPressed = true;
         targetSkala = skalaTekan;
+        targetBgWarna = warnaBgTekan;
 
         // Putar suara klik jika ada
         if (audioSource != null && suaraKlik != null)
@@ -180,6 +208,7 @@ public class MainMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         {
             isPressed = false;
             targetSkala = isHovered ? skalaHover : skalaNormal;
+            targetBgWarna = isHovered ? warnaBgHover : warnaBgNormal;
         }
     }
 }

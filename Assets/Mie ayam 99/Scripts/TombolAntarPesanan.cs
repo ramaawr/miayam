@@ -58,13 +58,6 @@ public class TombolAntarPesanan : MonoBehaviour
     // =========================================================================
     public void AntarPesanan()
     {
-        // Cek apakah ini level prolog (tutorial)
-        bool isProlog = false;
-        if (LevelManager.instance != null)
-        {
-            isProlog = LevelManager.instance.ApakahLevelProlog();
-        }
-
         // ----- GUARD: Pastikan GameManager ada -----
         if (GameManager.instance == null)
         {
@@ -72,30 +65,28 @@ public class TombolAntarPesanan : MonoBehaviour
             return;
         }
 
-        // Jika BUKAN prolog, lakukan validasi pelanggan dan tangan (Normal Flow)
-        if (!isProlog)
+        // ----- GUARD: Cek apakah ada pesanan aktif yang perlu diantar -----
+        // Kalau tidak ada NPC yang pesan, tombol tidak ngapa-ngapain
+        if (GameManager.instance.DaftarNPCAktif.Count == 0)
         {
-            // ----- GUARD: Cek apakah ada pesanan aktif yang perlu diantar -----
-            if (GameManager.instance.DaftarNPCAktif.Count == 0)
+            Debug.Log("Belum ada pesanan yang perlu diantar.");
+            if (popupKonfirmasi != null)
             {
-                Debug.Log("Belum ada pesanan yang perlu diantar.");
-                if (popupKonfirmasi != null)
-                {
-                    popupKonfirmasi.TampilkanPeringatan("Belum ada pelanggan yang datang memesan! Silakan tunggu pelanggan terlebih dahulu.");
-                }
-                return;
+                popupKonfirmasi.TampilkanPeringatan("No customers have ordered yet! Please wait for a customer first.");
             }
+            return;
+        }
 
-            // ----- GUARD: Cek apakah pemain sudah membawa makanan -----
-            if (GameManager.instance.BawaMakanan == true)
+        // ----- GUARD: Cek apakah pemain sudah membawa makanan -----
+        // Kalau sudah bawa (belum diserahkan ke NPC), jangan bisa antar lagi
+        if (GameManager.instance.BawaMakanan == true)
+        {
+            Debug.Log("Kamu sudah membawa makanan! Serahkan dulu ke NPC.");
+            if (popupKonfirmasi != null)
             {
-                Debug.Log("Kamu sudah membawa makanan! Serahkan dulu ke NPC.");
-                if (popupKonfirmasi != null)
-                {
-                    popupKonfirmasi.TampilkanPeringatan("Kamu sudah membawa makanan di tangan! Serahkan dulu pesanan ini ke pelanggan di gerobak depan.");
-                }
-                return;
+                popupKonfirmasi.TampilkanPeringatan("You are already carrying food! Hand this order to the customer at the cart first.");
             }
+            return;
         }
 
         // ----- GUARD: Cek apakah referensi mangkok sudah ada -----
@@ -114,32 +105,24 @@ public class TombolAntarPesanan : MonoBehaviour
             Debug.Log("Mangkok masih kosong! Tidak bisa diantar.");
             if (popupKonfirmasi != null)
             {
-                popupKonfirmasi.TampilkanPeringatan("Mangkok Anda masih kosong! Masukkan mie terlebih dahulu sebelum mengantar pesanan.");
+                popupKonfirmasi.TampilkanPeringatan("Your bowl is still empty! Put noodles in first before serving the order.");
             }
             return;
         }
 
-        // Jika ini adalah level prolog, lewati tahap popup konfirmasi agar lebih cepat (1-click)
-        if (isProlog)
-        {
-            Debug.Log("Mengantar pesanan Prolog (langsung selesai tanpa konfirmasi).");
-            KonfirmasiAntarPesanan();
-            return; // hentikan eksekusi kode di bawah agar tidak memunculkan popup
-        }
-
         // =====================================================================
-        // TAMPILKAN POPUP KONFIRMASI (Hanya untuk Level Normal)
+        // TAMPILKAN POPUP KONFIRMASI
         // Jika referensi popupKonfirmasi di-assign, kita munculkan popup.
         // Jika tidak di-assign (fallback), langsung kirim pesanan seperti biasa.
         // =====================================================================
         if (popupKonfirmasi != null)
         {
             // Buat string rincian isi mangkok secara manual agar ramah pemula dan rapi
-            string detailMasakan = "Isi Mangkok Saat Ini:\n" +
-                                   "• Mie : " + (mangkokDapur.AdaMie ? "include" : "none") + "\n" +
-                                   "• Ayam : " + mangkokDapur.TotalAyam + "\n" +
-                                   "• Bakso : " + mangkokDapur.Totalbaso + "\n" +
-                                   "• Sayur : " + mangkokDapur.TotalSayur + "";
+            string detailMasakan = "Current Bowl Contents:\n" +
+                                   "• Noodle: " + (mangkokDapur.AdaMie ? "included" : "none") + "\n" +
+                                   "• Chicken: " + mangkokDapur.TotalAyam + "\n" +
+                                   "• Meatball: " + mangkokDapur.Totalbaso + "\n" +
+                                   "• Veggies: " + mangkokDapur.TotalSayur + "";
 
 
             popupKonfirmasi.Tampilkan(this, detailMasakan);
@@ -157,29 +140,6 @@ public class TombolAntarPesanan : MonoBehaviour
     // =========================================================================
     public void KonfirmasiAntarPesanan()
     {
-        bool isProlog = false;
-        if (LevelManager.instance != null)
-        {
-            isProlog = LevelManager.instance.ApakahLevelProlog();
-        }
-
-        // Jika ini adalah level prolog, sistemnya sangat sederhana:
-        // Hapus mangkok, lalu suruh LevelManager langsung menamatkan level.
-        if (isProlog)
-        {
-            KosongkanMangkok();
-            Debug.Log("Masakan Tutorial (Prolog) selesai!");
-            
-            // Perintahkan LevelManager menyelesaikan fase prolog (memainkan dialog akhir dan memanggil Diary)
-            if (LevelManager.instance != null)
-            {
-                LevelManager.instance.SelesaikanPrologManual();
-            }
-            return; // Hentikan fungsi di sini agar tidak menjalankan logika kamera dan bawa makanan
-        }
-
-        // =====================================================================
-        // JIKA BUKAN PROLOG: ALUR NORMAL
         // =====================================================================
         // LANGKAH 1: Baca isi mangkok dapur
         // Ambil semua counter dari script Mangkok yang sudah ada
